@@ -15,6 +15,30 @@ terraform {
   }
 }
 
+# create vpc
+resource "google_compute_network" "kubernetes-vpc" {
+  name = "kubernetes-vpc"
+  auto_create_subnetworks = "false"
+}
+
+# create subnect for kube-master
+resource "google_compute_subnetwork" "nkube-master-subnect" {
+  name          = "kube-master-subnet"
+  ip_cidr_range = "10.0.0.0/21"
+  region        = "us-central1"
+  network       = google_compute_network.kubernetes-vpc.id
+  depends_on = ["google_compute_network.kubernetes-vpc"]
+}
+
+# create subnet for kube-minions
+resource "google_compute_subnetwork" "nkube-master-subnect" {
+  name          = "kube-master-subnet"
+  ip_cidr_range = "10.0.8.0/21"
+  region        = "us-central1"
+  network       = google_compute_network.kubernetes-vpc.id
+   depends_on = ["google_compute_network.kubernetes-vpc"]
+}
+
 resource "google_compute_instance" "default" {
   name         = "banuka-test"
   machine_type = "n1-standard-1"
