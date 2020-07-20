@@ -14,7 +14,7 @@ create-ssh-key-pair:
     - pwd
     - mkdir -p ~/.ssh
 
-  # key is genereated ONLY for ansible use
+    # key is genereated ONLY for ansible use
     - |
       #!/bin/bash
       FILE=~/.ssh/id_rsa
@@ -25,7 +25,7 @@ create-ssh-key-pair:
           ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
       fi
 
-  # to log into master node/minions, this key will be picked by terraform and place in each node
+    # to log into master node/minions, this key will be picked by terraform and place in each node
     - sudo echo $PUBLICKEYNEW > ~/.ssh/gitlabnew.pub
     - chmod 400 ~/.ssh/gitlabnew.pub
 
@@ -97,7 +97,6 @@ deploy:
 #   start_in: 30 seconds
 #   tags:
 #     - banuka-gcp
-
 
 # ansible-playbooks:
 #   stage: ansible-playbooks
