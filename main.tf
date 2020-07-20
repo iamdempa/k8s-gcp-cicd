@@ -31,7 +31,7 @@ resource "google_compute_subnetwork" "nkube-master-subnect" {
 }
 
 # create subnet for kube-minions
-resource "google_compute_subnetwork" "nkube-master-subnect" {
+resource "google_compute_subnetwork" "kube-minion-subnect" {
   name          = "kube-master-subnet"
   ip_cidr_range = "10.0.8.0/21"
   region        = "us-central1"
