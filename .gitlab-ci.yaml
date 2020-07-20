@@ -1,0 +1,128 @@
+stages:
+  - create-ssh-key-pair
+  - prerequisites-install
+  - install-terraform
+  - deploy
+  - restart-sshd
+  - test-ansible
+  - ansible-playbooks
+  - destroy
+
+create-ssh-key-pair:
+  stage: create-ssh-key-pair
+  script:
+    - pwd
+    - mkdir -p ~/.ssh
+    - |
+      #!/bin/bash
+      FILE=~/.ssh/id_rsa
+      if [ -f "$FILE" ]; then
+          echo "$FILE exists."
+      else 
+          ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
+      fi
+    - sudo echo $PUBLICKEYNEW > ~/.ssh/gitlabnew.pub
+    - chmod 400 ~/.ssh/gitlabnew.pub
+
+  tags:
+    - banuka-gcp
+
+prerequisites-install:
+  stage: prerequisites-install
+  script:
+    - echo "hi"
+    - sudo yum update -y && sudo yum install wget unzip -y
+  tags:
+    - banuka-gcp
+
+install_terraform:
+  stage: install-terraform
+  script:
+    - export VER="0.12.9"
+    - wget https://releases.hashicorp.com/terraform/${VER}/terraform_${VER}_linux_amd64.zip
+    - unzip terraform_${VER}_linux_amd64.zip
+    - sudo mv terraform /usr/local/bin/
+    - pwd
+    - rm -rf terraform_${VER}_linux_amd64.zip
+    - which terraform
+  tags:
+    - banuka-gcp
+
+deploy:
+  stage: deploy
+  script:
+    - echo "" > ~/.ssh/known_hosts
+    - terraform init
+    - terraform plan
+    - terraform apply --auto-approve
+  tags:
+    - banuka-gcp
+
+restart-sshd:
+  stage: restart-sshd
+  script:
+    - pwd
+    - export ANSIBLE_HOST_KEY_CHECKING=False
+    - |
+      string="StrictHostKeyChecking no"
+      file=/etc/ssh/ssh_config
+
+      grep -qwi "$string$" "$file" && \
+      sed -i "s,\(^[^[:alnum:]]*\)\($string$\),\2,i" "$file" || \
+      sudo echo "$string" >> "$file"
+
+    - cat /etc/ssh/ssh_config
+    - cat /etc/ansible/hosts
+    - cd ~/.ssh
+    - service sshd restart
+    - ls
+  tags:
+    - banuka-gcp
+
+test-ansible:
+  stage: test-ansible
+  retry:
+    max: 2
+    when:
+      - always
+  script:
+    - ansible -m ping all
+    - ls
+  when: delayed
+  start_in: 30 seconds
+  tags:
+    - banuka-gcp
+
+# ansible-commands:
+#   stage: ansible-commands
+#   script:
+#     - echo "ansible"
+#     - ansible-playbook ./ansible-playbooks/master_and_minions.yaml
+#     - ansible-playbook ./ansible-playbooks/master.yaml
+#   tags:
+#     - banuka-gcp
+
+ansible-playbooks:
+  stage: ansible-playbooks
+  retry:
+    max: 2
+    when:
+      - always
+  script:
+    - echo "ansible"
+    - ansible-playbook ./ansible-playbooks/master_and_minions.yaml
+    - ansible-playbook ./ansible-playbooks/master.yaml
+    - ansible-playbook ./ansible-playbooks/join_master_and_hosts.yaml
+  when: delayed
+  start_in: 10 seconds
+  tags:
+    - banuka-gcp
+
+destroy:
+  stage: destroy
+  script:
+    - terraform init
+    - terraform destroy --auto-approve
+  when: manual
+  tags:
+    - banuka-gcp

@@ -1,0 +1,70 @@
+---
+- hosts: all
+  tasks:
+    - name: Update and upgrade apt packages
+      become: ubuntu
+      apt:
+        upgrade: yes
+        update_cache: yes
+
+    - name: install apt-transport-https
+      become: ubuntu
+      apt: update_cache=yes force_apt_get=yes
+
+    - name: APT Key
+      become: ubuntu
+      shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
+
+    - name: Add docker repository
+      become: ubuntu
+      shell: |
+        sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+    - name: Add GPG key for kubernetes
+      become: ubuntu
+      shell: |
+        curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+
+    - name: create folder if not exists
+      become: ubuntu
+      file:
+        path: /etc/apt/sources.list.d
+        state: directory
+        owner: root
+        group: root
+        mode: 0775
+
+    - name: create file
+      become: ubuntu
+      file:
+        path: /etc/apt/sources.list.d/kubernetes.list
+        state: touch
+
+    - name: write to the file
+      become: ubuntu
+      copy: content="deb https://apt.kubernetes.io/ kubernetes-xenial main" dest="/etc/apt/sources.list.d/kubernetes.list"
+
+    - name: Update and upgrade apt packages
+      become: ubuntu
+      apt:
+        upgrade: yes
+        update_cache: yes
+
+    - name: Install kubelet kubeadm kubectl and kubernetes-cni
+      become: ubuntu
+      shell: | 
+        sudo apt-get install -y docker-ce=5:19.03.11~3-0~ubuntu-$(lsb_release -cs) kubelet=1.18.2-00 kubeadm=1.18.2-00 kubectl=1.18.2-00  
+
+
+    - name: Hold the versions of kubelet kubeadm kubectl being accidently upgraded
+      become: ubuntu
+      shell: |
+        sudo apt-mark hold docker-ce kubelet kubeadm kubectl
+
+    - name: Enable the IP tables andte make immediate changes (second line)
+      become: ubuntu
+      shell: |
+        echo "net.bridge.bridge-nf-call-iptables=1" | sudo tee -a /etc/sysctl.conf
+        sudo sysctl -p
+
+    

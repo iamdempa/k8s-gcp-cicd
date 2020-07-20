@@ -1,0 +1,25 @@
+---
+- hosts: kube-master
+  tasks:
+    - name: Copy the file
+      copy:
+        src: "/etc/ansible/hosts"
+        dest: "/root/onlymaster.txt"
+
+    - name: Initialize kubeadm
+      become: ubuntu
+      shell: |
+        sudo kubeadm init --pod-network-cidr=192.168.0.0/16
+
+    - name: Start the cluster with the current user
+      become: ubuntu
+      shell: |
+        mkdir -p $HOME/.kube
+        sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+        sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+    - name: Set the calico network
+      become: ubuntu
+      shell: |
+        kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+

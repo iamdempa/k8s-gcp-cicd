@@ -1,0 +1,38 @@
+---
+- hosts: kube-master
+  tasks:
+    - name: Print the value
+      become: true
+      shell: |
+        kubeadm token create --print-join-command 2> /dev/null
+      register: token
+
+    - name: set fact
+      set_fact:
+        joincommand: "{{ token.stdout }}"
+
+    - name: Print
+      become: true
+      shell: |
+        echo {{joincommand}} > /root/join.sh
+
+    - name: Fetch the join.sh to the runner (backward copy)
+      fetch:
+        src: /root/join.sh
+        dest: /root/
+        flat: yes
+
+- hosts: kube-minions
+  tasks:
+    - name: Copy the join.sh
+      become: true
+      copy:
+        src: /root/join.sh
+        dest: /root/join.sh
+        mode: +x
+
+    - name: Join the minions
+      become: true
+      shell: |
+        cd /root/
+        ./join.sh
