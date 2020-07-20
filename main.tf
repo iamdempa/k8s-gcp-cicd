@@ -17,7 +17,7 @@ terraform {
 
 # create vpc
 resource "google_compute_network" "kubernetes-vpc" {
-  name = "kubernetes-vpc"
+  name                    = "kubernetes-vpc"
   auto_create_subnetworks = "false"
 }
 
@@ -27,7 +27,7 @@ resource "google_compute_subnetwork" "master-sub" {
   ip_cidr_range = "10.0.0.0/21"
   region        = "us-central1"
   network       = "${google_compute_network.kubernetes-vpc.id}"
-  depends_on = ["google_compute_network.kubernetes-vpc"]
+  depends_on    = ["google_compute_network.kubernetes-vpc"]
 }
 
 # create subnet for kube-minions
@@ -36,7 +36,7 @@ resource "google_compute_subnetwork" "minions-sub" {
   ip_cidr_range = "10.0.8.0/21"
   region        = "us-central1"
   network       = "${google_compute_network.kubernetes-vpc.id}"
-  depends_on = ["google_compute_network.master-sub"]
+  depends_on    = ["google_compute_network.master-sub"]
 }
 
 resource "google_compute_instance" "default" {
