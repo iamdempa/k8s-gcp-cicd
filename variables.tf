@@ -17,3 +17,15 @@ variable "bucket_name" {
 variable "storage_class" {
   type = "string"
 }
+
+variable "public_key_path" {
+  type = "string"
+}
+
+variable "gitlabnew_login_key_path" {
+  type = "string"
+}
+
+variable "private_key_path" {
+  type = "string"
+}
