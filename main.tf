@@ -23,7 +23,7 @@ resource "google_compute_network" "kubernetes-vpc" {
 
 # create subnect for kube-master
 resource "google_compute_subnetwork" "master-sub" {
-  name          = "kube-master-subnet"
+  name          = "master"
   ip_cidr_range = "10.0.0.0/21"
   region        = "us-central1"
   network       = "${google_compute_network.kubernetes-vpc.id}"
@@ -32,7 +32,7 @@ resource "google_compute_subnetwork" "master-sub" {
 
 # create subnet for kube-minions
 resource "google_compute_subnetwork" "minions-sub" {
-  name          = "kube-minion-subnet"
+  name          = "minion"
   ip_cidr_range = "10.0.8.0/21"
   region        = "us-central1"
   network       = "${google_compute_network.kubernetes-vpc.id}"
