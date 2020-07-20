@@ -30,6 +30,7 @@ resource "google_compute_subnetwork" "master-sub" {
   depends_on    = ["google_compute_network.kubernetes-vpc"]
 }
 
+
 # create subnet for kube-minions
 resource "google_compute_subnetwork" "minions-sub" {
   name          = "minion"
