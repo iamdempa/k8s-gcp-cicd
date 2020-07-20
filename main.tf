@@ -1,9 +1,9 @@
 # Provide 
-provider "google"{
-    credentials = "${file("token.json")}"
-    project = "${var.project_name}"
-    region = "${var.region}"
-    zone = "${var.zone}"
+provider "google" {
+  credentials = "${file("token.json")}"
+  project     = "${var.project_name}"
+  region      = "${var.region}"
+  zone        = "${var.zone}"
 }
 
 # Configure the backend
@@ -28,10 +28,6 @@ resource "google_compute_instance" "default" {
     }
   }
 
-  // Local SSD disk
-  scratch_disk {
-  }
-
   network_interface {
     network = "default"
 
@@ -45,8 +41,4 @@ resource "google_compute_instance" "default" {
   }
 
   metadata_startup_script = "echo hi > /test.txt"
-
-  service_account {
-    scopes = ["userinfo-email", "compute-ro", "storage-ro"]
-  }
 }
