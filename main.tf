@@ -45,7 +45,7 @@ resource "google_compute_firewall" "kube-master-firewall" {
   network = "${google_compute_network.kubernetes-vpc.name}"
 
   allow {
-    protocol = "all"
+    protocol = "ssh"
   }
   # allow {
   #   protocol = "icmp"
