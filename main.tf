@@ -40,25 +40,35 @@ resource "google_compute_subnetwork" "minions-sub" {
 }
 
 # adding a firewall to the VPC
-resource "google_compute_firewall" "kube-master-firewall" {
-  name    = "kube-master-firewall"
+# resource "google_compute_firewall" "kube-master-firewall" {
+#   name    = "kube-master-firewall"
+#   network = "${google_compute_network.kubernetes-vpc.name}"
+
+#   allow {
+#     protocol = "all"
+#   }
+
+#   # allow {
+#   #   protocol = "icmp"
+#   # }
+
+
+#   # allow {
+#   #   protocol = "tcp"
+#   #   ports    = ["80", "8080", "1000-2000"]
+#   # }
+
+#   source_tags = ["kube-master-firewall", "0.0.0.0/0"]
+# }
+
+module firewall-module {
+  source = "/Users/Gabriel/Terraform/Terraform-registry/terraform-gcp-firewall-rules"
+  name = "kube-master-firewall"
   network = "${google_compute_network.kubernetes-vpc.name}"
-
-  allow {
-    protocol = "all"
-  }
-
-  # allow {
-  #   protocol = "icmp"
-  # }
-
-
-  # allow {
-  #   protocol = "tcp"
-  #   ports    = ["80", "8080", "1000-2000"]
-  # }
-
-  source_tags = ["kube-master-firewall", "0.0.0.0/0"]
+  protocol = "tcp"
+  ports = ["ssh"]
+  source_ranges = ["0.0.0.0/0"]
+  target_tags = [""]
 }
 
 resource "google_compute_instance" "kube-master" {
