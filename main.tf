@@ -21,14 +21,6 @@ resource "google_compute_network" "kubernetes-vpc" {
   auto_create_subnetworks = "false"
 }
 
-module "vpc" {
-  source = "terraform-google-modules/network/google//modules/vpc"
-
-  project_id   = "${var.project_name}"
-  network_name = "kubernetes-vpc-module"
-
-  auto_create_subnetworks = "false"
-}
 
 # create subnect for kube-master
 resource "google_compute_subnetwork" "master-sub" {
