@@ -43,7 +43,6 @@ resource "google_compute_subnetwork" "minions-sub" {
 resource "google_compute_firewall" "kube-master-firewall" {
   name    = "kube-master-firewall"
   network = "${google_compute_network.kubernetes-vpc.name}"
-
   allow {
     protocol = "all"
   }
