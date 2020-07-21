@@ -26,7 +26,7 @@ resource "google_compute_subnetwork" "master-sub" {
   name          = "master"
   ip_cidr_range = "10.0.0.0/21"
   region        = "us-central1"
-  network       = "${google_compute_network.kubernetes-vpc.id}"
+  network       = "${google_compute_network.kubernetes-vpc.name}"
   depends_on    = ["google_compute_network.kubernetes-vpc"]
 }
 
@@ -39,12 +39,12 @@ resource "google_compute_subnetwork" "minions-sub" {
   depends_on    = ["google_compute_network.master-sub"]
 }
 
-resource "google_compute_instance" "default" {
+resource "google_compute_instance" "test" {
   name         = "banuka-test"
   machine_type = "n1-standard-1"
   zone         = "us-central1-a"
 
-  tags = ["foo", "bar"]
+  tags = ["test"]
 
   boot_disk {
     initialize_params {
@@ -61,8 +61,8 @@ resource "google_compute_instance" "default" {
   }
 
   metadata = {
-    foo = "bar"
+    Name = "test"
   }
 
-  metadata_startup_script = "echo hi > /test.txt"
+  # metadata_startup_script = "echo hi > /test.txt"
 }
