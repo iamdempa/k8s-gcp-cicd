@@ -29,3 +29,7 @@ variable "gitlabnew_login_key_path" {
 variable "private_key_path" {
   type = string
 }
+
+variable "minions_count" {
+  type = string
+ }

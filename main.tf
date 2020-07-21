@@ -72,7 +72,7 @@ resource "google_compute_instance" "kube-master" {
   machine_type = "n1-standard-1"
   zone         = "us-central1-a"
 
-  tags = ["test"]
+  tags = ["kube-master"]
 
   boot_disk {
     initialize_params {
@@ -81,7 +81,7 @@ resource "google_compute_instance" "kube-master" {
   }
 
   network_interface {
-    subnetwork = google_compute_subnetwork.minions-sub.name
+    subnetwork = google_compute_subnetwork.master-sub.name
 
     access_config {
       // Ephemeral IP
@@ -90,6 +90,37 @@ resource "google_compute_instance" "kube-master" {
 
   metadata = {
     Name = "test"
+  }
+
+  # metadata_startup_script = "echo hi > /test.txt"
+}
+
+
+resource "google_compute_instance" "kube-minion" {
+  
+  count   = var.minions_count
+  name         = "kube-minion-${count.index}"
+  machine_type = "n1-standard-1"
+  zone         = "us-central1-b"
+
+  tags = ["kube-minion-${count.index}"]
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-9"
+    }
+  }
+
+  network_interface {
+    subnetwork = google_compute_subnetwork.minion-sub.name
+
+    access_config {
+      // Ephemeral IP
+    }
+  }
+
+  metadata = {
+    Name = "minion-${count.index}"
   }
 
   # metadata_startup_script = "echo hi > /test.txt"
