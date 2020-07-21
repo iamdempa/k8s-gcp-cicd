@@ -63,7 +63,6 @@ deploy:
   tags:
     - banuka-gcp-runner
 
-    
 restart-sshd:
   stage: restart-sshd
   script:
@@ -78,7 +77,14 @@ restart-sshd:
       sudo echo "$string" >> "$file"
 
     - cat /etc/ssh/ssh_config
-    - mkdir -p /etc/ansible/ && touch /etc/ansible/hosts
+    - |
+      #!/bin/bash
+      ANSIBLEHOSTS=/etc/ansible/hosts
+      if [ -f "$ANSIBLEHOSTS" ]; then
+          echo "$ANSIBLEHOSTS exists."
+      else 
+          mkdir -p /etc/ansible/ && touch /etc/ansible/hosts
+      fi
     - cat /etc/ansible/hosts
     - cd ~/.ssh
     - service sshd restart
@@ -99,8 +105,6 @@ restart-sshd:
 #   start_in: 30 seconds
 #   tags:
 #     - banuka-gcp-runner
-
-
 
 # ansible-playbooks:
 #   stage: ansible-playbooks
