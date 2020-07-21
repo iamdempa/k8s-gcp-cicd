@@ -153,14 +153,14 @@ resource "null_resource" "web3" {
         command = <<EOD
 cat <<EOF > /etc/ansible/hosts
 [all] 
-${google_compute_instance.kube-master.network_interface.0.access_config.0.nat_ip}
-${google_compute_instance.kube-minion[0].network_interface.0.access_config.0.nat_ip}
-${google_compute_instance.kube-minion[1].network_interface.0.access_config.1.nat_ip}
+${google_compute_instance.kube-master.network_interface.0.access_config.*.nat_ip}
+${google_compute_instance.kube-minion[0].network_interface.0.access_config.*.nat_ip}
+${google_compute_instance.kube-minion[1].network_interface.0.access_config.*.nat_ip}
 [kube-master]
-${google_compute_instance.kube-master.network_interface.0.access_config.0.nat_ip}
+${google_compute_instance.kube-master.network_interface.0.access_config.*.nat_ip}
 [kube-minions]
-${google_compute_instance.kube-minion[0].network_interface.0.access_config.0.nat_ip}
-${google_compute_instance.kube-minion[1].network_interface.0.access_config.1.nat_ip}
+${google_compute_instance.kube-minion[0].network_interface.0.access_config.*.nat_ip}
+${google_compute_instance.kube-minion[1].network_interface.0.access_config.*.nat_ip}
 EOF
 EOD
   }
