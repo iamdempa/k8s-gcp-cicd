@@ -38,7 +38,25 @@ resource "google_compute_subnetwork" "minions-sub" {
   network       = "${google_compute_network.kubernetes-vpc.id}"
 }
 
-resource "google_compute_instance" "test" {
+# create kube-master security group
+resource "google_compute_firewall" "kube-master-sg" {
+  name    = "test-firewall"
+  network = "${google_compute_network.kubernetes-vpc.name}"
+
+  allow {
+    protocol = "icmp"
+  }
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80", "8080", "1000-2000"]
+  }
+
+  source_tags = ["kube-master-sg"]
+}
+
+
+resource "google_compute_instance" "kube-master" {
   name         = "banuka-test"
   machine_type = "n1-standard-1"
   zone         = "us-central1-a"
@@ -52,7 +70,7 @@ resource "google_compute_instance" "test" {
   }
 
   network_interface {
-    network = "default"
+    network = "${google_compute_subnetwork.master-sub.name}"
 
     access_config {
       // Ephemeral IP
