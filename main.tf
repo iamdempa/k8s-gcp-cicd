@@ -46,6 +46,7 @@ resource "google_compute_firewall" "kube-master-firewall" {
 
   allow {
     protocol = "ssh"
+    ports    = ["22"]
   }
   # allow {
   #   protocol = "icmp"
@@ -60,16 +61,6 @@ resource "google_compute_firewall" "kube-master-firewall" {
   # source_tags = ["kube-master-firewall", "0.0.0.0/0"]
   source_ranges = ["0.0.0.0/0"]
 }
-
-# module firewall-module {
-#   source        = "GMafra/firewall-rules/gcp"
-#   name          = "kube-master-firewall"
-#   network       = "${google_compute_network.kubernetes-vpc.name}"
-#   protocol      = "tcp"
-#   ports         = "ssh"
-#   source_ranges = "0.0.0.0/0"
-#   target_tags   = [""]
-# }
 
 resource "google_compute_instance" "kube-master" {
   name         = "banuka-test"
