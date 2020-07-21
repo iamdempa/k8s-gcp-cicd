@@ -174,7 +174,7 @@ resource "google_compute_instance" "kube-minion" {
 
 
 output "master-ip" {
-    value = ["${google_compute_instance.kube-master.*.public_ip}"]
+    value = ["${google_compute_instance.kube-master.*.address}"]
 } 
 
 
