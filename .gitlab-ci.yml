@@ -63,26 +63,26 @@ deploy:
   tags:
     - banuka-gcp-runner
 
-# restart-sshd:
-#   stage: restart-sshd
-#   script:
-#     - pwd
-#     - export ANSIBLE_HOST_KEY_CHECKING=False
-#     - |
-#       string="StrictHostKeyChecking no"
-#       file=/etc/ssh/ssh_config
+restart-sshd:
+  stage: restart-sshd
+  script:
+    - pwd
+    - export ANSIBLE_HOST_KEY_CHECKING=False
+    - |
+      string="StrictHostKeyChecking no"
+      file=/etc/ssh/ssh_config
 
-#       grep -qwi "$string$" "$file" && \
-#       sed -i "s,\(^[^[:alnum:]]*\)\($string$\),\2,i" "$file" || \
-#       sudo echo "$string" >> "$file"
+      grep -qwi "$string$" "$file" && \
+      sed -i "s,\(^[^[:alnum:]]*\)\($string$\),\2,i" "$file" || \
+      sudo echo "$string" >> "$file"
 
-#     - cat /etc/ssh/ssh_config
-#     - cat /etc/ansible/hosts
-#     - cd ~/.ssh
-#     - service sshd restart
-#     - ls
-#   tags:
-#     - banuka-gcp-runner
+    - cat /etc/ssh/ssh_config
+    - cat /etc/ansible/hosts
+    - cd ~/.ssh
+    - service sshd restart
+    - ls
+  tags:
+    - banuka-gcp-runner
 
 # test-ansible:
 #   stage: test-ansible
