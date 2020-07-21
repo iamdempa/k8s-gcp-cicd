@@ -21,6 +21,34 @@ resource "google_compute_network" "kubernetes-vpc" {
   auto_create_subnetworks = "false"
 }
 
+# adding a firewall to the VPC
+resource "google_compute_firewall" "kube-master-firewall" {
+  name    = "kube-master-firewall"
+  network = "${google_compute_network.kubernetes-vpc.name}"
+
+  # ssh access 
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+
+  # source_tags = ["kube-master-firewall", "0.0.0.0/0"]
+  source_ranges = ["0.0.0.0/0"]
+}
+
+
+# adding a route to the VPC to the internet gateway
+resource "google_compute_route" "internet-gateway" {
+  name        = "internate-gateway"
+  dest_range  = "0.0.0.0/0"
+  network     = "${google_compute_network.kubernetes-vpc.name}"
+  next_hop_gateway = "global/gateways/default-internet-gateway"
+  priority    = 10
+}
+
+resource "google_compute_network" "default" {
+  name = "compute-network"
+}
 
 # create subnect for kube-master
 resource "google_compute_subnetwork" "master-sub" {
@@ -40,20 +68,6 @@ resource "google_compute_subnetwork" "minions-sub" {
   depends_on    = ["google_compute_network.kubernetes-vpc"]
 }
 
-# adding a firewall to the VPC
-resource "google_compute_firewall" "kube-master-firewall" {
-  name    = "kube-master-firewall"
-  network = "${google_compute_network.kubernetes-vpc.name}"
-
-  # ssh access 
-  allow {
-    protocol = "tcp"
-    ports    = ["22"]
-  }
-
-  # source_tags = ["kube-master-firewall", "0.0.0.0/0"]
-  source_ranges = ["0.0.0.0/0"]
-}
 
 resource "google_compute_instance" "kube-master" {
   name         = "banuka-test"
