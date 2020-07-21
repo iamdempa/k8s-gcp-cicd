@@ -92,19 +92,19 @@ restart-sshd:
   tags:
     - banuka-gcp-runner
 
-# test-ansible:
-#   stage: test-ansible
-#   retry:
-#     max: 2
-#     when:
-#       - always
-#   script:
-#     - ansible -m ping all
-#     - ls
-#   when: delayed
-#   start_in: 30 seconds
-#   tags:
-#     - banuka-gcp-runner
+test-ansible:
+  stage: test-ansible
+  retry:
+    max: 2
+    when:
+      - always
+  script:
+    - ansible -m ping all
+    - ls
+  when: delayed
+  start_in: 30 seconds
+  tags:
+    - banuka-gcp-runner
 
 # ansible-playbooks:
 #   stage: ansible-playbooks
