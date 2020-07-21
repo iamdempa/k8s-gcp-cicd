@@ -24,7 +24,7 @@ resource "google_compute_network" "kubernetes-vpc" {
 # adding a firewall to the VPC
 resource "google_compute_firewall" "kube-master-firewall" {
   name    = "kube-master-firewall"
-  network = "${google_compute_subnetwork.master-sub.name}"
+  network = "${google_compute_network.kubernetes-vpc.self_link}"
 
   # ssh access 
   allow {
@@ -36,26 +36,23 @@ resource "google_compute_firewall" "kube-master-firewall" {
   source_ranges = ["0.0.0.0/0"]
 }
 
+
 # adding a route to the VPC to the internet gateway
 resource "google_compute_route" "internet-gateway" {
-  name             = "internate-gateway"
-  dest_range       = "0.0.0.0/0"
-  network          = "${google_compute_subnetwork.master-sub.name}"
+  name        = "internate-gateway"
+  dest_range  = "0.0.0.0/0"
+  network     = "${google_compute_network.kubernetes-vpc.self_link}"
   next_hop_gateway = "global/gateways/default-internet-gateway"
-  priority         = 10
-}
-
-resource "google_compute_network" "default" {
-  name = "compute-network"
+  priority    = 10
 }
 
 # create subnect for kube-master
-resource "google_compute_subnetwork" "master-sub" {
-  name          = "master"
+resource "google_compute_subnetwork" "master-sub" self_link          = "master"
   ip_cidr_range = "10.0.0.0/21"
   region        = "us-central1"
-  network       = "${google_compute_network.kubernetes-vpc.name}"
+  network       = "${google_compute_network.kubernetes-vpc.self_link}"
   depends_on    = ["google_compute_network.kubernetes-vpc"]
+  private_ip_google_access = false
 }
 
 # create subnet for kube-minions
@@ -63,9 +60,11 @@ resource "google_compute_subnetwork" "minions-sub" {
   name          = "minion"
   ip_cidr_range = "10.0.8.0/21"
   region        = "us-central1"
-  network       = "${google_compute_network.kubernetes-vpc.name}"
+  network       = "${google_compute_network.kubernetes-vpc.self_link}"
   depends_on    = ["google_compute_network.kubernetes-vpc"]
+  private_ip_google_access = true
 }
+
 
 resource "google_compute_instance" "kube-master" {
   name         = "banuka-test"
@@ -81,7 +80,7 @@ resource "google_compute_instance" "kube-master" {
   }
 
   network_interface {
-    subnetwork = "${google_compute_subnetwork.master-sub.name}"
+    subnetwork = "${google_compute_subnetwork.master-sub.self_link}"
 
     access_config {
       // Ephemeral IP
