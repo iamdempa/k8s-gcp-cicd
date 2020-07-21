@@ -70,7 +70,7 @@ resource "google_compute_instance" "kube-master" {
   }
 
   network_interface {
-    network = "${google_compute_subnetwork.master-sub.name}"
+    subnetwork = "${google_compute_subnetwork.master-sub.name}"
 
     access_config {
       // Ephemeral IP
