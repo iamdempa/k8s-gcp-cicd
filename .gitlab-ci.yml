@@ -77,7 +77,7 @@ restart-sshd:
       sudo echo "$string" >> "$file"
 
     - cat /etc/ssh/ssh_config
-    - mkdir -p /etc/ansible/hosts
+    - mkdir -p /etc/ansible/ && touch /etc/ansible/hosts
     - cat /etc/ansible/hosts
     - cd ~/.ssh
     - service sshd restart
