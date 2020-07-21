@@ -1,9 +1,9 @@
 # Provide 
 provider "google" {
   credentials = file("token.json")
-  project     = "${var.project_name}"
-  region      = "${var.region}"
-  zone        = "${var.zone}"
+  project     = var.project_name
+  region      = var.region
+  zone        = var.zone
 }
 
 # Configure the backend
@@ -24,7 +24,7 @@ resource "google_compute_network" "kubernetes-vpc" {
 # adding a firewall to the VPC
 resource "google_compute_firewall" "kube-master-firewall" {
   name    = "kube-master-firewall"
-  network = "${google_compute_network.kubernetes-vpc.name}"
+  network = google_compute_network.kubernetes-vpc.name
 
   # ssh access 
   allow {
