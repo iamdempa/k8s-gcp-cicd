@@ -65,8 +65,8 @@ module firewall-module {
   name          = "kube-master-firewall"
   network       = "${google_compute_network.kubernetes-vpc.name}"
   protocol      = "tcp"
-  ports         = ["ssh"]
-  source_ranges = ["0.0.0.0/0"]
+  ports         = "ssh"
+  source_ranges = "0.0.0.0/0"
   target_tags   = [""]
 }
 
