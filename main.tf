@@ -35,26 +35,31 @@ resource "google_compute_subnetwork" "minions-sub" {
   name          = "minion"
   ip_cidr_range = "10.0.8.0/21"
   region        = "us-central1"
-  network       = "${google_compute_network.kubernetes-vpc.id}"
+  network       = "${google_compute_network.kubernetes-vpc.name}"
+  depends_on    = ["google_compute_network.kubernetes-vpc"]
 }
 
 # create kube-master security group
-resource "google_compute_firewall" "kube-master-sg" {
-  name    = "kubernetes-master-sg"
+resource "google_compute_firewall" "kube-master-firewall" {
+  name    = "kube-master-firewall"
   network = "${google_compute_network.kubernetes-vpc.name}"
 
   allow {
-    protocol = "icmp"
+    protocol = "all"
   }
 
-  allow {
-    protocol = "tcp"
-    ports    = ["80", "8080", "1000-2000"]
-  }
+  # allow {
+  #   protocol = "icmp"
+  # }
 
-  source_tags = ["kube-master-sg"]
+
+  # allow {
+  #   protocol = "tcp"
+  #   ports    = ["80", "8080", "1000-2000"]
+  # }
+
+  source_tags = ["kube-master-firewall"]
 }
-
 
 resource "google_compute_instance" "kube-master" {
   name         = "banuka-test"
