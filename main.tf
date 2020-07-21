@@ -49,6 +49,7 @@ resource "google_compute_firewall" "kube-master-firewall" {
     protocol = "tcp"
     ports    = ["22"]
   }
+  
 
   # source_tags = ["kube-master-firewall", "0.0.0.0/0"]
   source_ranges = ["0.0.0.0/0"]
