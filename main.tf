@@ -44,19 +44,11 @@ resource "google_compute_firewall" "kube-master-firewall" {
   name    = "kube-master-firewall"
   network = "${google_compute_network.kubernetes-vpc.name}"
 
+  # ssh access 
   allow {
-    protocol = "ssh"
+    protocol = "tcp"
     ports    = ["22"]
   }
-  # allow {
-  #   protocol = "icmp"
-  # }
-
-
-  # allow {
-  #   protocol = "tcp"
-  #   ports    = ["80", "8080", "1000-2000"]
-  # }
 
   # source_tags = ["kube-master-firewall", "0.0.0.0/0"]
   source_ranges = ["0.0.0.0/0"]
