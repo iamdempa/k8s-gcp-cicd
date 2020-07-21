@@ -47,7 +47,6 @@ resource "google_compute_firewall" "kube-master-firewall" {
   allow {
     protocol = "all"
   }
-
   # allow {
   #   protocol = "icmp"
   # }
