@@ -40,7 +40,7 @@ resource "google_compute_subnetwork" "minions-sub" {
 
 # create kube-master security group
 resource "google_compute_firewall" "kube-master-sg" {
-  name    = "test-firewall"
+  name    = "kubernetes-master-sg"
   network = "${google_compute_network.kubernetes-vpc.name}"
 
   allow {
