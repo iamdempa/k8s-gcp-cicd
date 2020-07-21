@@ -52,7 +52,6 @@ resource "google_compute_subnetwork" "minions-sub" {
 #   #   protocol = "icmp"
 #   # }
 
-
 #   # allow {
 #   #   protocol = "tcp"
 #   #   ports    = ["80", "8080", "1000-2000"]
@@ -62,13 +61,13 @@ resource "google_compute_subnetwork" "minions-sub" {
 # }
 
 module firewall-module {
-  source = "/Users/Gabriel/Terraform/Terraform-registry/terraform-gcp-firewall-rules"
-  name = "kube-master-firewall"
-  network = "${google_compute_network.kubernetes-vpc.name}"
-  protocol = "tcp"
-  ports = ["ssh"]
+  source        = "GMafra/firewall-rules/gcp"
+  name          = "kube-master-firewall"
+  network       = "${google_compute_network.kubernetes-vpc.name}"
+  protocol      = "tcp"
+  ports         = ["ssh"]
   source_ranges = ["0.0.0.0/0"]
-  target_tags = [""]
+  target_tags   = [""]
 }
 
 resource "google_compute_instance" "kube-master" {
