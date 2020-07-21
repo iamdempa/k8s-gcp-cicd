@@ -138,3 +138,47 @@ resource "google_compute_instance" "kube-minion" {
 
   # metadata_startup_script = "echo hi > /test.txt"
 }
+
+# resource "null_resource" "web3" {
+
+#  triggers  = {
+#     key = "${uuid()}"
+#   }
+
+#   provisioner "local-exec" {
+#       command = "rm -rf ~/.ssh/known_hosts"
+#   }
+
+#   provisioner "local-exec" {
+#         command = <<EOD
+# cat <<EOF > /etc/ansible/hosts
+# [all] 
+# ${aws_instance.kubernetes_master.public_ip}
+# ${aws_instance.kubernetes_minion.0.public_ip}
+# ${aws_instance.kubernetes_minion.1.public_ip}
+# [kube-master]
+# ${aws_instance.kubernetes_master.public_ip}
+# [kube-minions]
+# ${aws_instance.kubernetes_minion.0.public_ip}
+# ${aws_instance.kubernetes_minion.1.public_ip}
+# EOF
+# EOD
+#   }
+
+#   # provisioner "local-exec" {
+#   #   command = "num1=${var.minion-count} && num2=1 && num3=$[num1 - num2] && for i in $(seq 0 $num3); do echo ${aws_instance.kubernetes_minion..public_ip} > /etc/ansible/machan.txt; done"
+#   #   # command = "num1=${var.minion-count} num2=1 num3=$[num1 - num2] for i in $(seq 0 $num3); do echo $1; done"
+#   # }
+#  }
+
+
+
+output "master-ip" {
+    value = ["${google_compute_instance.kube-master.*.public_ip}"]
+} 
+
+
+output "minion-ips" {
+    value = ["${google_compute_instance.kube-minion.*.public_ip}"]
+} 
+
