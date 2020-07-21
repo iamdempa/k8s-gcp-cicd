@@ -39,7 +39,7 @@ resource "google_compute_subnetwork" "minions-sub" {
   depends_on    = ["google_compute_network.kubernetes-vpc"]
 }
 
-# create kube-master security group
+# adding a firewall to the VPC
 resource "google_compute_firewall" "kube-master-firewall" {
   name    = "kube-master-firewall"
   network = "${google_compute_network.kubernetes-vpc.name}"
@@ -58,7 +58,7 @@ resource "google_compute_firewall" "kube-master-firewall" {
   #   ports    = ["80", "8080", "1000-2000"]
   # }
 
-  source_tags = ["kube-master-firewall"]
+  source_tags = ["kube-master-firewall", "0.0.0.0/0"]
 }
 
 resource "google_compute_instance" "kube-master" {
