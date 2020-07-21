@@ -95,7 +95,15 @@ resource "google_compute_instance" "kube-master" {
               #!/bin/bash    
               sudo apt-get update
               sudo apt-get upgrade -y
-              sudo apt install ansible -y       
+              sudo apt install ansible -y
+
+              AUTHORIZEDKEYFILE=/root/.ssh/authorized_keys
+              if [ -f "$AUTHORIZEDKEYFILE" ]; then
+                  echo "$AUTHORIZEDKEYFILE exists."
+              else 
+                  mkdir -p /root/.ssh/ && touch /root/.ssh/authorized_keys
+              fi
+
               echo "${file("${var.public_key_path}")}" >> /root/.ssh/authorized_keys                          
             EOF
   # metadata_startup_script = "echo hi > /test.txt"
@@ -132,7 +140,16 @@ resource "google_compute_instance" "kube-minion" {
               #!/bin/bash    
               sudo apt-get update
               sudo apt-get upgrade -y
-              sudo apt install ansible -y       
+              sudo apt install ansible -y  
+
+              
+              AUTHORIZEDKEYFILE=/root/.ssh/authorized_keys
+              if [ -f "$AUTHORIZEDKEYFILE" ]; then
+                  echo "$AUTHORIZEDKEYFILE exists."
+              else 
+                  mkdir -p /root/.ssh/ && touch /root/.ssh/authorized_keys
+              fi
+
               echo "${file("${var.public_key_path}")}" >> /root/.ssh/authorized_keys                          
             EOF
 
