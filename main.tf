@@ -174,11 +174,11 @@ resource "google_compute_instance" "kube-minion" {
 
 
 output "master-ip" {
-    value = ["${google_compute_instance.kube-master.network_interface.*.access_config.*.nat_ip}"]
+    value = ["${google_compute_instance.kube-master.network_interface.0.access_config.*.nat_ip}"]
 } 
 
 
 output "minion-ips" {
-    value = ["${google_compute_instance.kube-minion.network_interface.*.access_config.*.nat_i}"]
+    value = ["${google_compute_instance.kube-minion.network_interface.0.access_config.*.nat_ip}"]
 } 
 
