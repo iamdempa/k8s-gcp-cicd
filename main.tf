@@ -66,7 +66,6 @@ resource "google_compute_subnetwork" "minions-sub" {
   private_ip_google_access = "true"
 }
 
-
 resource "google_compute_instance" "kube-master" {
   name         = "kube-master"
   machine_type = "n1-standard-1"
