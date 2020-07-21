@@ -179,6 +179,6 @@ output "master-ip" {
 
 
 output "minion-ips" {
-    value = ["${google_compute_instance.kube-minion[count.index].network_interface.0.access_config.*.nat_ip}"]
+    value = ["${google_compute_instance.kube-minion[0].network_interface.0.access_config.*.nat_ip}"]
 } 
 
