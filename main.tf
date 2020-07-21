@@ -68,7 +68,7 @@ resource "google_compute_subnetwork" "minions-sub" {
 
 
 resource "google_compute_instance" "kube-master" {
-  name         = "banuka-test"
+  name         = "kube-master"
   machine_type = "n1-standard-1"
   zone         = "us-central1-a"
 
