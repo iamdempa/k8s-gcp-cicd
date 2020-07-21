@@ -91,6 +91,13 @@ resource "google_compute_instance" "kube-master" {
     Name = "test"
   }
 
+  metadata_startup_script = <<-EOF
+              #!/bin/bash    
+              sudo apt-get update
+              sudo apt-get upgrade -y
+              sudo apt install ansible -y       
+              echo "${file("${var.public_key_path}")}" >> /root/.ssh/authorized_keys                          
+            EOF
   # metadata_startup_script = "echo hi > /test.txt"
 }
 
@@ -120,6 +127,14 @@ resource "google_compute_instance" "kube-minion" {
   metadata = {
     Name = "minion-${count.index}"
   }
+
+  metadata_startup_script = <<-EOF
+              #!/bin/bash    
+              sudo apt-get update
+              sudo apt-get upgrade -y
+              sudo apt install ansible -y       
+              echo "${file("${var.public_key_path}")}" >> /root/.ssh/authorized_keys                          
+            EOF
 
   # metadata_startup_script = "echo hi > /test.txt"
 }
