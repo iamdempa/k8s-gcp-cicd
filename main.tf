@@ -24,7 +24,7 @@ resource "google_compute_network" "kubernetes-vpc" {
 # adding a firewall to the VPC
 resource "google_compute_firewall" "kube-master-firewall" {
   name    = "kube-master-firewall"
-  network = "${google_compute_network.kubernetes-vpc.self_link}"
+  network = "${google_compute_network.kubernetes-vpc.name}"
 
   # ssh access 
   allow {
@@ -41,18 +41,19 @@ resource "google_compute_firewall" "kube-master-firewall" {
 resource "google_compute_route" "internet-gateway" {
   name        = "internate-gateway"
   dest_range  = "0.0.0.0/0"
-  network     = "${google_compute_network.kubernetes-vpc.self_link}"
+  network     = "${google_compute_network.kubernetes-vpc.name}"
   next_hop_gateway = "global/gateways/default-internet-gateway"
   priority    = 10
 }
 
 # create subnect for kube-master
-resource "google_compute_subnetwork" "master-sub" self_link          = "master"
+resource "google_compute_subnetwork" "master-sub" {
+  name          = "master"
   ip_cidr_range = "10.0.0.0/21"
   region        = "us-central1"
-  network       = "${google_compute_network.kubernetes-vpc.self_link}"
+  network       = "${google_compute_network.kubernetes-vpc.name}"
   depends_on    = ["google_compute_network.kubernetes-vpc"]
-  private_ip_google_access = false
+  private_ip_google_access = "false"
 }
 
 # create subnet for kube-minions
@@ -60,9 +61,9 @@ resource "google_compute_subnetwork" "minions-sub" {
   name          = "minion"
   ip_cidr_range = "10.0.8.0/21"
   region        = "us-central1"
-  network       = "${google_compute_network.kubernetes-vpc.self_link}"
+  network       = "${google_compute_network.kubernetes-vpc.name}"
   depends_on    = ["google_compute_network.kubernetes-vpc"]
-  private_ip_google_access = true
+  private_ip_google_access = "true"
 }
 
 
@@ -80,7 +81,7 @@ resource "google_compute_instance" "kube-master" {
   }
 
   network_interface {
-    subnetwork = "${google_compute_subnetwork.master-sub.self_link}"
+    subnetwork = "${google_compute_subnetwork.master-sub.name}"
 
     access_config {
       // Ephemeral IP
