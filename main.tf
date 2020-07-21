@@ -94,7 +94,6 @@ resource "google_compute_instance" "kube-master" {
   # metadata_startup_script = "echo hi > /test.txt"
 }
 
-
 resource "google_compute_instance" "kube-minion" {
   
   count   = var.minions_count
