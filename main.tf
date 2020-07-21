@@ -111,7 +111,7 @@ resource "google_compute_instance" "kube-minion" {
   }
 
   network_interface {
-    subnetwork = google_compute_subnetwork.minion-sub.name
+    subnetwork = google_compute_subnetwork.minions-sub.name
 
     access_config {
       // Ephemeral IP
