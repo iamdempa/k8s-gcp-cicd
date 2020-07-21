@@ -139,33 +139,31 @@ resource "google_compute_instance" "kube-minion" {
   # metadata_startup_script = "echo hi > /test.txt"
 }
 
-# resource "null_resource" "web3" {
+resource "null_resource" "web3" {
 
-#  triggers  = {
-#     key = "${uuid()}"
-#   }
+ triggers  = {
+    key = "${uuid()}"
+  }
 
-#   provisioner "local-exec" {
-#       command = "rm -rf ~/.ssh/known_hosts"
-#   }
+  provisioner "local-exec" {
+      command = "rm -rf ~/.ssh/known_hosts"
+  }
 
-#   provisioner "local-exec" {
-#         command = <<EOD
-# cat <<EOF > /etc/ansible/hosts
-# [all] 
-# ${google_compute_instance.kube-master.network_interface.0.access_config.0.nat_ip}
-# ${google_compute_instance.kube-minion[0].network_interface.0.access_config.*.nat_ip}
-# ${google_compute_instance.kube-minion[1].network_interface.0.access_config.*.nat_ip}
-# [kube-master]
-# ${google_compute_instance.kube-master.network_interface.0.access_config.0.nat_ip}
-# [kube-minions]
-# ${google_compute_instance.kube-minion[0].network_interface.0.access_config.*.nat_ip}
-# ${google_compute_instance.kube-minion[1].network_interface.0.access_config.*.nat_ip}
-# EOF
-# EOD
-#   }
+  provisioner "local-exec" {
+        command = <<EOD
+cat <<EOF > /etc/ansible/hosts
+[all] 
+${google_compute_instance.kube-master.network_interface.0.access_config.*.nat_ip}
+${google_compute_instance.kube-minion[*].network_interface.0.access_config.0.nat_ip}
+[kube-master]
+${google_compute_instance.kube-master.network_interface.0.access_config.*.nat_ip}
+[kube-minions]
+${google_compute_instance.kube-minion[*].network_interface.0.access_config.0.nat_ip}
+EOF
+EOD
+  }
 
-#  }
+ }
 
 
 
