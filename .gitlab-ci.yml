@@ -43,7 +43,7 @@ create-ssh-key-pair:
   tags:
     - gitlab-org
 
-prerequisites-install:
+prerequisites-check:
   stage: Prerequisites
   script:
     - cat id_rsa.pub
@@ -63,7 +63,7 @@ install_terraform:
     - rm -rf terraform_${VER}_linux_amd64.zip
     - which terraform
   dependencies:
-    - prerequisites-install    
+    - prerequisites-check
   tags:
     - gitlab-org
 
