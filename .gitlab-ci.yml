@@ -69,6 +69,7 @@ deploy:
     - terraform init
     - terraform plan
     - terraform apply --auto-approve
+    - cat /etc/ansible/hosts
   tags:
     - banuka-gcp-runner
 
@@ -102,7 +103,7 @@ test-ansible:
     - ansible -m ping all
     - ls
   when: delayed
-  start_in: 60 seconds
+  start_in: 2 minutes
   tags:
     - banuka-gcp-runner
 
