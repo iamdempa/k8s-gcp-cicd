@@ -141,7 +141,7 @@ ansible-playbooks:
     - ansible-playbook ./ansible-playbooks/join_master_and_hosts.yaml
   when: delayed
   start_in: 10 seconds
-  dependencies: ["test-ansible"]
+  dependencies: []
   tags:
     - gitlab-org
 
