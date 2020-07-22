@@ -6,7 +6,7 @@ stages:
   - prerequisites
   - deploy
   - restart-sshd
-  - Ansible
+  - ansible
   - ansible-playbooks
   - destroy
 
