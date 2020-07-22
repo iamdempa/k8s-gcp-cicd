@@ -1,6 +1,6 @@
 # Provide 
 provider "google" {
-  credentials = file("token.json")
+  credentials = "${file("token.json")}"
   project     = var.project_name
   region      = var.region
   zone        = var.zone
