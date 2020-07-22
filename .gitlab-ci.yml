@@ -65,7 +65,7 @@ deploy:
       else 
           mkdir -p /etc/ansible/ && touch /etc/ansible/hosts
       fi
-    - cat /etc/ansible/hosts    
+    - cat /etc/ansible/hosts
     - terraform init
     - terraform plan
     - terraform apply --auto-approve
