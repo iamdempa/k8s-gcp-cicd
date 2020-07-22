@@ -11,29 +11,29 @@ stages:
   - ansible-playbooks
   - destroy
 
-# create-ssh-key-pair:
-#   stage: create-ssh-key-pair
-#   script:
-#     - pwd
-#     - mkdir -p ~/.ssh
+create-ssh-key-pair:
+  stage: create-ssh-key-pair
+  script:
+    - pwd
+    - mkdir -p ~/.ssh
 
-#     # key is genereated ONLY for ansible use
-#     - |
-#       # !/bin/bash
-#       FILE=~/.ssh/id_rsa
-#       if [ -f "$FILE" ]; then
-#         echo "$FILE exists."
-#       else 
+    # key is genereated ONLY for ansible use
+    - >
+      # !/bin/bash
+      FILE=~/.ssh/id_rsa
+      if [ -f "$FILE" ]; then
+        echo "$FILE exists."
+      else 
 
-#         ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
-#       fi
+        ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
+      fi
 
-#     # to log into master node/minions, this key will be picked by terraform and place in each node
-#     - echo $PUBLICKEYNEW > ~/.ssh/gitlabnew.pub
-#     - chmod 400 ~/.ssh/gitlabnew.pub
+    # to log into master node/minions, this key will be picked by terraform and place in each node
+    - echo $PUBLICKEYNEW > ~/.ssh/gitlabnew.pub
+    - chmod 400 ~/.ssh/gitlabnew.pub
 
-#   tags:
-#     - gitlab-org
+  tags:
+    - gitlab-org
 
 prerequisites-install:
   stage: prerequisites-install
