@@ -18,14 +18,18 @@ create-ssh-key-pair:
     - mkdir -p ~/.ssh
 
     # key is genereated ONLY for ansible use
+    # ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
     - |
       # !/bin/bash
       FILE=~/.ssh/id_rsa
       if [ -f "$FILE" ]; then
         echo "$FILE exists."
+        echo "removing the file and generating a new one"
+        cd ~/.ssh
+        rm -rf id_rsa id_rsa.pub
+        echo -e "\n"|ssh-keygen -t rsa -N ""
       else 
-
-        ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
+        echo -e "\n"|ssh-keygen -t rsa -N ""      
       fi
 
     # to log into master node/minions, this key will be picked by terraform and place in each node
