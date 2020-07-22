@@ -16,9 +16,6 @@ create-ssh-key-pair:
   script:
     - pwd
     - mkdir -p ~/.ssh
-    - yum -y install openssh-server openssh-clients
-    # - systemctl start sshd
-    - systemctl enable sshd    
 
     # key is genereated ONLY for ansible use
     # ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
@@ -59,7 +56,6 @@ install_terraform:
     - mv terraform /usr/local/bin/
     - pwd
     - rm -rf terraform_${VER}_linux_amd64.zip
-    - yum install which -y
     - which terraform
   tags:
     - gitlab-org
@@ -68,6 +64,14 @@ deploy:
   stage: deploy
   script:
     - echo "" > ~/.ssh/known_hosts
+    - |
+      # !/bin/bash
+      KNOWNHOSTS=~/.ssh/known_hosts
+      if [ -f "$KNOWNHOSTS" ]; then
+        echo "$KNOWNHOSTS exists."        
+      else 
+        mkdir -p ~/.ssh && touch ~/.ssh/known_hosts          
+      fi        
     - |
       #!/bin/bash
       ANSIBLEHOSTS=/etc/ansible/hosts
