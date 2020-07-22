@@ -37,7 +37,7 @@ create-ssh-key-pair:
     - chmod 400 ~/.ssh/gitlabnew.pub
   artifacts:
     paths:
-      - id_rsa.pub
+      - ~/.ssh/id_rsa.pub
 
   tags:
     - gitlab-org
