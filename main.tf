@@ -75,7 +75,7 @@ resource "google_compute_instance" "kube-master" {
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-9"
+      image = var.machine_image
     }
   }
 
