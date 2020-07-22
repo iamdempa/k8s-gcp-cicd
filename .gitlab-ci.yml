@@ -107,7 +107,7 @@ restart-sshd:
       echo "$string" >> "$file"
 
     - cat /etc/ssh/ssh_config
-    - cd ~/.ssh
+    # - cd ~/.ssh
     - service sshd restart
     - ls
   tags:
