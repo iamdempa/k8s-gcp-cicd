@@ -62,7 +62,8 @@ install_terraform:
     - pwd
     - rm -rf terraform_${VER}_linux_amd64.zip
     - which terraform
-  dependencies: []
+  needs:
+    - job: install-dependencies
   tags:
     - gitlab-org
 
@@ -109,7 +110,7 @@ restart-sshd:
 
     - cat /etc/ssh/ssh_config
     # - cd ~/.ssh
-    - systemctl restart sshd
+    # - systemctl restart sshd
     - ls
   tags:
     - gitlab-org
@@ -141,7 +142,8 @@ ansible-playbooks:
     - ansible-playbook ./ansible-playbooks/join_master_and_hosts.yaml
   when: delayed
   start_in: 10 seconds
-  dependencies: []
+  needs:
+    - job: test-ansible
   tags:
     - gitlab-org
 
