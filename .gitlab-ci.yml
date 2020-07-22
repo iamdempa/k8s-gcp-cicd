@@ -1,5 +1,5 @@
 image:
-  name: 19950818/banu-terraform-ansible-cicd:v1.0
+  name: 19950818/banu-terraform-ansible-cicd:v1.1
 
 stages:
   - create-ssh-key-pair
