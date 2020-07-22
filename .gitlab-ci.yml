@@ -108,7 +108,7 @@ restart-sshd:
 
     - cat /etc/ssh/ssh_config
     # - cd ~/.ssh
-    - service sshd restart
+    - systemctl restart sshd
     - ls
   tags:
     - gitlab-org
@@ -142,6 +142,15 @@ ansible-playbooks:
   start_in: 10 seconds
   tags:
     - gitlab-org
+
+destroy-if-failed:
+  stage: destroy
+  script:
+    - terraform init
+    - terraform destroy --auto-approve
+  when: on_failure
+  tags:
+    - gitlab-org  
 
 destroy:
   stage: destroy
