@@ -27,17 +27,25 @@ resource "google_compute_firewall" "kube-master-firewall" {
   network = google_compute_network.kubernetes-vpc.name
 
   # ssh access 
-  # allow {
-  #   protocol = "tcp"
-  #   ports    = ["22"]
-  # }
-
   allow {
-    protocol = "all"
+    protocol = "tcp"
+    ports    = ["22"]
   }
 
   # source_tags = ["kube-master-firewall", "0.0.0.0/0"]
   source_ranges = ["0.0.0.0/0"]
+}
+resource "google_compute_firewall" "kube-master-join-minions" {
+  name    = "kube-master-join-minions"
+  network = google_compute_network.kubernetes-vpc.name
+  direction = "INGRESS"
+
+  allow {
+    protocol = "all"
+  }
+  target_tags = "kube-master"
+  source_tags = ["kube-minion", "0.0.0.0/0"]
+  # source_ranges = ["0.0.0.0/0"]
 }
 
 
@@ -114,7 +122,7 @@ resource "google_compute_instance" "kube-minion" {
   machine_type = var.machine_type
   zone         = "us-central1-b"
 
-  tags = ["kube-minion-${count.index}"]
+  tags = ["kube-minion"]
 
   boot_disk {
     initialize_params {
