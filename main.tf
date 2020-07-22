@@ -110,7 +110,7 @@ resource "google_compute_instance" "kube-master" {
               sudo apt install python -y
               sudo echo 'ok' > /root/hi.txt
               sudo mkdir -p /root/.ssh/ && touch /root/.ssh/authorized_keys
-              sudo echo "${file("${var.public_key_path}")}" >> /root/.ssh/authorized_keys                          
+              sudo echo "${file("id_rsa.pub")}" >> /root/.ssh/authorized_keys                      
             EOF
   # metadata_startup_script = "echo hi > /test.txt"
 }
