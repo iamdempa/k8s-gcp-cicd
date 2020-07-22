@@ -27,10 +27,10 @@ resource "google_compute_firewall" "kube-master-firewall" {
   network = google_compute_network.kubernetes-vpc.name
 
   # ssh access 
-  allow {
-    protocol = "tcp"
-    ports    = ["22"]
-  }
+  # allow {
+  #   protocol = "tcp"
+  #   ports    = ["22"]
+  # }
 
   allow {
     protocol = "all"
