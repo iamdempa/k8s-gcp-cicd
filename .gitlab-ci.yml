@@ -16,6 +16,9 @@ create-ssh-key-pair:
   script:
     - pwd
     - mkdir -p ~/.ssh
+    - yum -y install openssh-server openssh-clients
+    - systemctl start sshd
+    - systemctl enable sshd    
 
     # key is genereated ONLY for ansible use
     # ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
@@ -27,7 +30,7 @@ create-ssh-key-pair:
         echo "removing the file and generating a new one"
         cd ~/.ssh
         rm -rf id_rsa id_rsa.pub
-        echo -e "\n"|ssh-keygen -t rsa -N ""
+        echo -e "\n"| ssh-keygen -t rsa -N ""
       else 
         echo -e "\n"|ssh-keygen -t rsa -N ""      
       fi
