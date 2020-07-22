@@ -3,7 +3,6 @@ image:
 
 stages:
   - create-ssh-key-pair
-  - prerequisites-check
   - Prerequisites
   - deploy
   - restart-sshd
@@ -49,6 +48,7 @@ install-dependencies:
     - cat id_rsa.pub
     - echo "hi"
     - yum update -y && yum install wget unzip -y
+  needs: []    
   tags:
     - gitlab-org
 
