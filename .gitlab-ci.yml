@@ -4,7 +4,6 @@ image:
 stages:
   - create-ssh-key-pair
   - Prerequisites
-  - install-terraform
   - deploy
   - restart-sshd
   - Ansible
