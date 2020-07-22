@@ -18,16 +18,14 @@ create-ssh-key-pair:
     - mkdir -p ~/.ssh
 
     # key is genereated ONLY for ansible use
-    # - |
-    #   #!/bin/bash
-    #   FILE=~/.ssh/id_rsa
-    #   if [ -f "$FILE" ]; then
-    #     echo "$FILE exists."
-    #   else 
+    - |
+      FILE=~/.ssh/id_rsa
+      if [ -f "$FILE" ]; then
+        echo "$FILE exists."
+      else 
 
-    #     ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
-    #   fi
-    - ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
+        ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
+      fi
 
     # to log into master node/minions, this key will be picked by terraform and place in each node
     - echo $PUBLICKEYNEW > ~/.ssh/gitlabnew.pub
@@ -96,7 +94,6 @@ restart-sshd:
     - ls
   tags:
     - gitlab-org
-
 
 test-ansible:
   stage: test-ansible
