@@ -44,7 +44,7 @@ resource "google_compute_firewall" "kube-master-join-minions" {
     protocol = "all"
   }
   target_tags = ["kube-master"]
-  source_tags = ["kube-minion", "0.0.0.0/0"]
+  source_tags = ["kube-minion"]
   # source_ranges = ["0.0.0.0/0"]
 }
 
