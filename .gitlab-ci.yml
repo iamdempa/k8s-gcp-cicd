@@ -62,6 +62,7 @@ install_terraform:
     - pwd
     - rm -rf terraform_${VER}_linux_amd64.zip
     - which terraform
+  needs: ["install-dependencies"]    
   tags:
     - gitlab-org
 
@@ -114,7 +115,7 @@ restart-sshd:
     - gitlab-org
 
 test-ansible:
-  stage: Ansible
+  stage: ansible
   retry:
     max: 2
     when:
@@ -128,7 +129,7 @@ test-ansible:
     - gitlab-org
 
 ansible-playbooks:
-  stage: Ansible
+  stage: ansible
   retry:
     max: 2
     when:
@@ -140,8 +141,7 @@ ansible-playbooks:
     - ansible-playbook ./ansible-playbooks/join_master_and_hosts.yaml
   when: delayed
   start_in: 10 seconds
-  dependencies:
-    - test-ansible
+  needs: ["test-ansible"]  
   tags:
     - gitlab-org
 
