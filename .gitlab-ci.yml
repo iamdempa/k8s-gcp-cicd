@@ -102,25 +102,25 @@ test-ansible:
     - ansible -m ping all
     - ls
   when: delayed
-  start_in: 30 seconds
+  start_in: 60 seconds
   tags:
     - banuka-gcp-runner
 
-# ansible-playbooks:
-#   stage: ansible-playbooks
-#   retry:
-#     max: 2
-#     when:
-#       - always
-#   script:
-#     - echo "ansible"
-#     - ansible-playbook ./ansible-playbooks/master_and_minions.yaml
-#     - ansible-playbook ./ansible-playbooks/master.yaml
-#     - ansible-playbook ./ansible-playbooks/join_master_and_hosts.yaml
-#   when: delayed
-#   start_in: 10 seconds
-#   tags:
-#     - banuka-gcp-runner
+ansible-playbooks:
+  stage: ansible-playbooks
+  retry:
+    max: 2
+    when:
+      - always
+  script:
+    - echo "ansible"
+    - ansible-playbook ./ansible-playbooks/master_and_minions.yaml
+    - ansible-playbook ./ansible-playbooks/master.yaml
+    - ansible-playbook ./ansible-playbooks/join_master_and_hosts.yaml
+  when: delayed
+  start_in: 10 seconds
+  tags:
+    - banuka-gcp-runner
 
 destroy:
   stage: destroy
