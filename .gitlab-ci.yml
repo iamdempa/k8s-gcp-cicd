@@ -62,8 +62,7 @@ install_terraform:
     - pwd
     - rm -rf terraform_${VER}_linux_amd64.zip
     - which terraform
-  needs:
-    - install-dependencies    
+  dependencies: []
   tags:
     - gitlab-org
 
@@ -142,8 +141,7 @@ ansible-playbooks:
     - ansible-playbook ./ansible-playbooks/join_master_and_hosts.yaml
   when: delayed
   start_in: 10 seconds
-  needs:
-    - test-ansible  
+  dependencies: []
   tags:
     - gitlab-org
 
