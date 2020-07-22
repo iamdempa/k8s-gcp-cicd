@@ -17,7 +17,7 @@ create-ssh-key-pair:
     - pwd
     - mkdir -p ~/.ssh
     - yum -y install openssh-server openssh-clients
-    - systemctl start sshd
+    # - systemctl start sshd
     - systemctl enable sshd    
 
     # key is genereated ONLY for ansible use
