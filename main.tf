@@ -94,9 +94,9 @@ resource "google_compute_instance" "kube-master" {
   metadata_startup_script = <<-EOF
               #!/bin/bash    
               sudo apt-get update -y
+              sudo apt-get install ansible -y  
               sudo apt install python -y
               sudo echo 'ok' > /root/hi.txt
-              sudo apt-get install ansible -y
               sudo mkdir -p /root/.ssh/ && touch /root/.ssh/authorized_keys
               sudo echo "${file("${var.public_key_path}")}" >> /root/.ssh/authorized_keys                          
             EOF
