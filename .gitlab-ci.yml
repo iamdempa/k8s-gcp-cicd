@@ -62,7 +62,7 @@ install_terraform:
     - pwd
     - rm -rf terraform_${VER}_linux_amd64.zip
     - which terraform
-  dependencies: ["install-dependencies"]
+  dependencies: []
   tags:
     - gitlab-org
 
