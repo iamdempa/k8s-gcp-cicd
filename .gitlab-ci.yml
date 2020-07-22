@@ -63,15 +63,15 @@ install_terraform:
 deploy:
   stage: deploy
   script:
-    - echo "" > ~/.ssh/known_hosts
     - |
       # !/bin/bash
       KNOWNHOSTS=~/.ssh/known_hosts
       if [ -f "$KNOWNHOSTS" ]; then
-        echo "$KNOWNHOSTS exists."        
+        echo "$KNOWNHOSTS exists."  
+        echo "" > ~/.ssh/known_hosts      
       else 
         mkdir -p ~/.ssh && touch ~/.ssh/known_hosts          
-      fi        
+      fi
     - |
       #!/bin/bash
       ANSIBLEHOSTS=/etc/ansible/hosts
