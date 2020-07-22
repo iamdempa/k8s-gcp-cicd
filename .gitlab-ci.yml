@@ -30,7 +30,7 @@ create-ssh-key-pair:
     - chmod 400 ~/.ssh/gitlabnew.pub
 
   tags:
-    - banuka-gcp-runner
+    - gitlab-org
 
 prerequisites-install:
   stage: prerequisites-install
@@ -38,7 +38,7 @@ prerequisites-install:
     - echo "hi"
     - sudo yum update -y && sudo yum install wget unzip -y
   tags:
-    - banuka-gcp-runner
+    - gitlab-org
 
 install_terraform:
   stage: install-terraform
@@ -51,7 +51,7 @@ install_terraform:
     - rm -rf terraform_${VER}_linux_amd64.zip
     - which terraform
   tags:
-    - banuka-gcp-runner
+    - gitlab-org
 
 deploy:
   stage: deploy
@@ -71,7 +71,7 @@ deploy:
     - terraform apply --auto-approve
     - cat /etc/ansible/hosts
   tags:
-    - banuka-gcp-runner
+    - gitlab-org
 
 restart-sshd:
   stage: restart-sshd
@@ -91,9 +91,9 @@ restart-sshd:
     - service sshd restart
     - ls
   tags:
-    - banuka-gcp-runner
+    - gitlab-org
 
-    
+
 test-ansible:
   stage: test-ansible
   retry:
@@ -106,7 +106,7 @@ test-ansible:
   when: delayed
   start_in: 2 minutes
   tags:
-    - banuka-gcp-runner
+    - gitlab-org
 
 ansible-playbooks:
   stage: ansible-playbooks
@@ -122,7 +122,7 @@ ansible-playbooks:
   when: delayed
   start_in: 10 seconds
   tags:
-    - banuka-gcp-runner
+    - gitlab-org
 
 destroy:
   stage: destroy
@@ -131,4 +131,4 @@ destroy:
     - terraform destroy --auto-approve
   when: manual
   tags:
-    - banuka-gcp-runner
+    - gitlab-org
