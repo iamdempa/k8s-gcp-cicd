@@ -59,6 +59,7 @@ install_terraform:
     - mv terraform /usr/local/bin/
     - pwd
     - rm -rf terraform_${VER}_linux_amd64.zip
+    - yum install which -y
     - which terraform
   tags:
     - gitlab-org
