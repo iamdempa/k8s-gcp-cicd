@@ -33,3 +33,7 @@ variable "private_key_path" {
 variable "minions_count" {
   type = string
  }
+
+ variable "machine_image" {
+   type = string
+ }
