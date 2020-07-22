@@ -1,3 +1,6 @@
+image:
+  name: 19950818/banu-terraform-ansible-cicd
+
 stages:
   - create-ssh-key-pair
   - prerequisites-install
