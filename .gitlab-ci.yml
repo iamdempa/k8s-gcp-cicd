@@ -35,6 +35,9 @@ create-ssh-key-pair:
     # to log into master node/minions, this key will be picked by terraform and place in each node
     - echo $PUBLICKEYNEW > ~/.ssh/gitlabnew.pub
     - chmod 400 ~/.ssh/gitlabnew.pub
+  artifacts:
+    paths:
+      - /root/.ssh/id_rsa.pub
 
   tags:
     - gitlab-org
