@@ -93,6 +93,7 @@ restart-sshd:
   tags:
     - banuka-gcp-runner
 
+    
 test-ansible:
   stage: test-ansible
   retry:
