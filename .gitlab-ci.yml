@@ -1,7 +1,5 @@
 image:
   name: 19950818/banu-terraform-ansible-cicd
-  entrypoint:
-    - '/usr/bin/ssh-keygen'
 
 stages:
   - create-ssh-key-pair
