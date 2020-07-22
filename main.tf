@@ -68,7 +68,7 @@ resource "google_compute_subnetwork" "minions-sub" {
 
 resource "google_compute_instance" "kube-master" {
   name         = "kube-master"
-  machine_type = "n1-standard-1"
+  machine_type = var.machine_type
   zone         = "us-central1-a"
 
   tags = ["kube-master"]
@@ -107,7 +107,7 @@ resource "google_compute_instance" "kube-minion" {
   
   count   = var.minions_count
   name         = "kube-minion-${count.index}"
-  machine_type = "n1-standard-1"
+  machine_type = var.machine_type
   zone         = "us-central1-b"
 
   tags = ["kube-minion-${count.index}"]

@@ -37,3 +37,8 @@ variable "minions_count" {
  variable "machine_image" {
    type = string
  }
+
+ variable "machine_type" {
+   type = string
+   
+ }
