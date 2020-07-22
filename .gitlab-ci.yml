@@ -26,7 +26,7 @@ create-ssh-key-pair:
       fi
 
     # to log into master node/minions, this key will be picked by terraform and place in each node
-    - sudo echo $PUBLICKEYNEW > ~/.ssh/gitlabnew.pub
+    - echo $PUBLICKEYNEW > ~/.ssh/gitlabnew.pub
     - chmod 400 ~/.ssh/gitlabnew.pub
 
   tags:
@@ -36,7 +36,7 @@ prerequisites-install:
   stage: prerequisites-install
   script:
     - echo "hi"
-    - sudo yum update -y && sudo yum install wget unzip -y
+    - yum update -y && yum install wget unzip -y
   tags:
     - gitlab-org
 
@@ -46,7 +46,7 @@ install_terraform:
     - export VER="0.13.0-beta3"
     - wget https://releases.hashicorp.com/terraform/${VER}/terraform_${VER}_linux_amd64.zip
     - unzip terraform_${VER}_linux_amd64.zip
-    - sudo mv terraform /usr/local/bin/
+    - mv terraform /usr/local/bin/
     - pwd
     - rm -rf terraform_${VER}_linux_amd64.zip
     - which terraform
@@ -84,7 +84,7 @@ restart-sshd:
 
       grep -qwi "$string$" "$file" && \
       sed -i "s,\(^[^[:alnum:]]*\)\($string$\),\2,i" "$file" || \
-      sudo echo "$string" >> "$file"
+      echo "$string" >> "$file"
 
     - cat /etc/ssh/ssh_config
     - cd ~/.ssh
