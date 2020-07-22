@@ -3,6 +3,7 @@ image:
 
 stages:
   - create-ssh-key-pair
+  - prerequisites-check
   - Prerequisites
   - deploy
   - restart-sshd
