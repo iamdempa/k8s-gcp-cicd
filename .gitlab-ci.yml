@@ -4,9 +4,10 @@ image:
 stages:
   - create-ssh-key-pair
   - prerequisites
+  - install-terraform
   - deploy
   - restart-sshd
-  - ansible
+  - test-ansible
   - ansible-playbooks
   - destroy
 
@@ -48,12 +49,11 @@ install-dependencies:
     - cat id_rsa.pub
     - echo "hi"
     - yum update -y && yum install wget unzip -y
-  # needs: []    
   tags:
     - gitlab-org
 
 install_terraform:
-  stage: prerequisites
+  stage: install-terraform
   script:
     - export VER="0.13.0-beta3"
     - wget https://releases.hashicorp.com/terraform/${VER}/terraform_${VER}_linux_amd64.zip
@@ -62,8 +62,6 @@ install_terraform:
     - pwd
     - rm -rf terraform_${VER}_linux_amd64.zip
     - which terraform
-  needs:
-    - job: install-dependencies
   tags:
     - gitlab-org
 
@@ -116,7 +114,7 @@ restart-sshd:
     - gitlab-org
 
 test-ansible:
-  stage: ansible
+  stage: test-ansible
   retry:
     max: 2
     when:
@@ -130,7 +128,7 @@ test-ansible:
     - gitlab-org
 
 ansible-playbooks:
-  stage: ansible
+  stage: ansible-playbooks
   retry:
     max: 2
     when:
