@@ -1,6 +1,6 @@
 image:
   name: 19950818/banu-terraform-ansible-cicd:v1.3
-  pull_policy: if-not-present
+  
 
 stages:
   - create-ssh-key-pair
