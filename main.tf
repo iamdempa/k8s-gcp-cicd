@@ -167,7 +167,7 @@ resource "null_resource" "web3" {
 
   provisioner "local-exec" {
         command = <<EOD
-cat <<EOF > /etc/ansible/hosts
+cat <<EOF > hosts
 [all] 
 ${google_compute_instance.kube-master.network_interface.0.access_config.0.nat_ip}
 ${google_compute_instance.kube-minion[0].network_interface.0.access_config.0.nat_ip}

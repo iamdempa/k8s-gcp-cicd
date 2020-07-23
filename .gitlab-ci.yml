@@ -41,7 +41,7 @@ create-ssh-key-pair:
       - ./id_rsa.pub
 
   tags:
-    - gitlab-org
+    - machan-dind
 
 install-dependencies:
   stage: prerequisites
@@ -50,7 +50,7 @@ install-dependencies:
     - echo "hi"
     - yum update -y && yum install wget unzip -y
   tags:
-    - gitlab-org
+    - machan-dind
 
 install_terraform:
   stage: install-terraform
@@ -63,7 +63,7 @@ install_terraform:
     - rm -rf terraform_${VER}_linux_amd64.zip
     - which terraform
   tags:
-    - gitlab-org
+    - machan-dind
 
 deploy:
   stage: deploy
@@ -86,12 +86,16 @@ deploy:
           mkdir -p /etc/ansible/ && touch /etc/ansible/hosts
       fi
     - cat /etc/ansible/hosts
+    - cat /etc/ansible/hosts
+    - cp /etc/ansible/hosts ${CI_PROJECT_DIR}    
     - terraform init
     - terraform plan
     - terraform apply --auto-approve
-    - cat /etc/ansible/hosts
+  artifacts:
+    paths:
+      - ./hosts    
   tags:
-    - gitlab-org
+    - machan-dind
 
 restart-sshd:
   stage: restart-sshd
@@ -111,7 +115,7 @@ restart-sshd:
     # - systemctl restart sshd
     - ls
   tags:
-    - gitlab-org
+    - machan-dind
 
 test-ansible:
   stage: test-ansible
@@ -125,7 +129,7 @@ test-ansible:
   when: delayed
   start_in: 2 minutes
   tags:
-    - gitlab-org
+    - machan-dind
 
 ansible-playbooks:
   stage: ansible-playbooks
@@ -143,7 +147,7 @@ ansible-playbooks:
   needs:
     - job: test-ansible
   tags:
-    - gitlab-org
+    - machan-dind
 
 destroy-if-failed:
   stage: destroy
@@ -152,7 +156,7 @@ destroy-if-failed:
     - terraform destroy --auto-approve
   when: on_failure
   tags:
-    - gitlab-org  
+    - machan-dind  
 
 destroy:
   stage: destroy
@@ -161,4 +165,4 @@ destroy:
     - terraform destroy --auto-approve
   when: manual
   tags:
-    - gitlab-org
+    - machan-dind
