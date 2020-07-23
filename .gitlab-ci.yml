@@ -1,5 +1,6 @@
 image:
   name: 19950818/banu-terraform-ansible-cicd:v1.3
+  pull_policy: if-not-present
 
 stages:
   - create-ssh-key-pair
@@ -41,7 +42,7 @@ create-ssh-key-pair:
       - ./id_rsa.pub
 
   tags:
-    - machan-dind
+    - gitlab-org
 
 install-dependencies:
   stage: prerequisites
@@ -50,7 +51,7 @@ install-dependencies:
     - echo "hi"
     - yum update -y && yum install wget unzip -y
   tags:
-    - machan-dind
+    - gitlab-org
 
 install_terraform:
   stage: install-terraform
@@ -63,7 +64,7 @@ install_terraform:
     - rm -rf terraform_${VER}_linux_amd64.zip
     - which terraform
   tags:
-    - machan-dind
+    - gitlab-org
 
 deploy:
   stage: deploy
@@ -95,7 +96,7 @@ deploy:
     paths:
       - ./hosts    
   tags:
-    - machan-dind
+    - gitlab-org
 
 restart-sshd:
   stage: restart-sshd
@@ -115,7 +116,7 @@ restart-sshd:
     # - systemctl restart sshd
     - ls
   tags:
-    - machan-dind
+    - gitlab-org
 
 test-ansible:
   stage: test-ansible
@@ -129,7 +130,7 @@ test-ansible:
   when: delayed
   start_in: 2 minutes
   tags:
-    - machan-dind
+    - gitlab-org
 
 ansible-playbooks:
   stage: ansible-playbooks
@@ -147,7 +148,7 @@ ansible-playbooks:
   needs:
     - job: test-ansible
   tags:
-    - machan-dind
+    - gitlab-org
 
 destroy-if-failed:
   stage: destroy
@@ -156,7 +157,7 @@ destroy-if-failed:
     - terraform destroy --auto-approve
   when: on_failure
   tags:
-    - machan-dind  
+    - gitlab-org  
 
 destroy:
   stage: destroy
@@ -165,4 +166,4 @@ destroy:
     - terraform destroy --auto-approve
   when: manual
   tags:
-    - machan-dind
+    - gitlab-org
