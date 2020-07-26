@@ -61,8 +61,8 @@ resource "google_compute_route" "internet-gateway" {
 # create subnect for kube-master
 resource "google_compute_subnetwork" "master-sub" {
   name          = "master"
-  ip_cidr_range = "10.0.0.0/21"
-  region        = "us-central1"
+  ip_cidr_range = var.master_cidr
+  region        = var.master_region
   network       = google_compute_network.kubernetes-vpc.name
   depends_on    = [google_compute_network.kubernetes-vpc]
   private_ip_google_access = "false"
@@ -71,8 +71,8 @@ resource "google_compute_subnetwork" "master-sub" {
 # create subnet for kube-minions
 resource "google_compute_subnetwork" "minions-sub" {
   name          = "minion"
-  ip_cidr_range = "10.0.8.0/21"
-  region        = "us-central1"
+  ip_cidr_range = var.minion_cidr
+  region        = var.minion_region
   network       = google_compute_network.kubernetes-vpc.name
   depends_on    = [google_compute_network.kubernetes-vpc]
   private_ip_google_access = "true"
@@ -81,7 +81,7 @@ resource "google_compute_subnetwork" "minions-sub" {
 resource "google_compute_instance" "kube-master" {
   name         = "kube-master"
   machine_type = var.machine_type
-  zone         = "us-central1-a"
+  zone         = var.master_zone
 
   tags = ["kube-master"]
 
@@ -120,7 +120,7 @@ resource "google_compute_instance" "kube-minion" {
   count   = var.minions_count
   name         = "kube-minion-${count.index}"
   machine_type = var.machine_type
-  zone         = "us-central1-b"
+  zone         = var.minion_zone
 
   tags = ["kube-minion"]
 
