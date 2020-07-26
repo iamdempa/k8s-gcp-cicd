@@ -110,7 +110,7 @@ resource "google_compute_instance" "kube-master" {
               sudo apt install python -y
               sudo echo 'ok' > /root/hi.txt
               sudo mkdir -p /root/.ssh/ && touch /root/.ssh/authorized_keys
-              sudo echo "${file("id_rsa.pub")}" >> /root/.ssh/authorized_keys                      
+              sudo echo "${file("/root/.ssh/id_rsa.pub")}" >> /root/.ssh/authorized_keys                      
             EOF
   # metadata_startup_script = "echo hi > /test.txt"
 }
@@ -150,7 +150,7 @@ resource "google_compute_instance" "kube-minion" {
               sudo apt install python -y
               sudo echo 'ok' > /root/hi.txt
               sudo mkdir -p /root/.ssh/ && touch /root/.ssh/authorized_keys                         
-              sudo echo "${file("id_rsa.pub")}" >> /root/.ssh/authorized_keys
+              sudo echo "${file("/root/.ssh/id_rsa.pub")}" >> /root/.ssh/authorized_keys
             EOF
 
   # metadata_startup_script = "echo hi > /test.txt"
@@ -168,7 +168,7 @@ resource "null_resource" "web3" {
 
   provisioner "local-exec" {
         command = <<EOD
-cat <<EOF > hosts
+cat <<EOF > /etc/ansible/hosts
 [all] 
 ${google_compute_instance.kube-master.network_interface.0.access_config.0.nat_ip}
 ${google_compute_instance.kube-minion[0].network_interface.0.access_config.0.nat_ip}
