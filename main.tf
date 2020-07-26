@@ -34,7 +34,7 @@ resource "google_compute_firewall" "kubernetes-ssh-all" {
 
   # source_tags = ["kubernetes-ssh-all", "0.0.0.0/0"]
   source_ranges = ["0.0.0.0/0"]
-  target_tags = ["kube-master"]
+  target_tags = ["kube-master", "kube-minion"]
 }
 
 # rule to access grafana 
