@@ -91,6 +91,8 @@ deploy:
     - terraform init
     - terraform plan
     - terraform apply --auto-approve
+    - ls
+    - pwd 
   artifacts:
     paths:
       - ./hosts
