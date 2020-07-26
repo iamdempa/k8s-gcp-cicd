@@ -108,9 +108,9 @@ ansible-playbooks:
       - always
   script:
     - echo "ansible"
-    # - ansible-playbook ./ansible-playbooks/master_and_minions.yaml
-    # - ansible-playbook ./ansible-playbooks/master.yaml
-    # - ansible-playbook ./ansible-playbooks/join_master_and_hosts.yaml
+    - ansible-playbook ./kubernetes/ansible-playbooks/master_and_minions.yaml
+    - ansible-playbook ./kubernetes/ansible-playbooks/master.yaml
+    - ansible-playbook ./kubernetes/ansible-playbooks/join_master_and_hosts.yaml
   when: delayed
   start_in: 10 seconds
   tags:
@@ -120,21 +120,21 @@ install-prometheus:
   stage: prometheus-node-exporter-grafana
   script:
     - echo "Installing Prometheus"
-    - ansible-playbook ./ansible-playbooks/install_prometheus.yaml
+    - ansible-playbook ./prometheus/ansible-playbooks/install_prometheus.yaml
   tags:
     - banuka
 
 install-node-exporter:
   stage: prometheus-node-exporter-grafana
   script:
-    - ansible-playbook ./ansible-playbooks/install_node_exporter.yaml
+    - ansible-playbook ./node_exporter/ansible-playbooks/install_node_exporter.yaml
   tags:
     - banuka
 
 install-grafana:
   stage: prometheus-node-exporter-grafana
   script:
-    - ansible-playbook ./ansible-playbooks/install_grafana.yaml
+    - ansible-playbook ./grafana/ansible-playbooks/install_grafana.yaml
   tags:
     - banuka
 
