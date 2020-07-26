@@ -192,9 +192,9 @@ cat <<EOF > /etc/ansible/hosts
 ${google_compute_instance.kube-master.network_interface.0.access_config.0.nat_ip}
 ${google_compute_instance.kube-minion[0].network_interface.0.access_config.0.nat_ip}
 ${google_compute_instance.kube-minion[1].network_interface.0.access_config.0.nat_ip}
-[kube-master]
+[kube_master]
 ${google_compute_instance.kube-master.network_interface.0.access_config.0.nat_ip}
-[kube-minions]
+[kube_minions]
 ${google_compute_instance.kube-minion[0].network_interface.0.access_config.0.nat_ip}
 ${google_compute_instance.kube-minion[1].network_interface.0.access_config.0.nat_ip}
 EOF

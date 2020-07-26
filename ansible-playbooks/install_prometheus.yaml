@@ -1,5 +1,5 @@
 ---
-- hosts: kube-master
+- hosts: kube_master
   tasks:
     - name: Create /opt/docker/prommetheus
       become: true
@@ -10,4 +10,3 @@
       become: true
       shell: |
         docker run -it -d --name prometheus -p 9090:9090 -v /opt/docker/prometheus:/etc/prometheus prom/prometheus --config.file=/etc/prometheus/prometheus.yml
-    

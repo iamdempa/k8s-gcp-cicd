@@ -95,7 +95,7 @@ test-ansible:
     - ansible -m ping all
     - ls
   when: delayed
-  start_in: 2 minutes
+  start_in: 1 minutes
   tags:
     - banuka
 
@@ -121,6 +121,8 @@ install-prometheus:
     - echo "Installing Prometheus"
     - ansible-playbook ./ansible-playbooks/install_prometheus.yaml
     - docker ps
+  tags:
+    - banuka    
 
 
 # destroy_if_failed:

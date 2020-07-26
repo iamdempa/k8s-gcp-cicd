@@ -1,5 +1,5 @@
 ---
-- hosts: kube-master
+- hosts: kube_master
   tasks:
     - name: Print the value
       become: true
@@ -22,7 +22,7 @@
         dest: /root/
         flat: yes
 
-- hosts: kube-minions
+- hosts: kube_minions
   tasks:
     - name: Copy the join.sh
       become: true

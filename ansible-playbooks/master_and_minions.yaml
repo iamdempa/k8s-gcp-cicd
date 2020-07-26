@@ -4,7 +4,7 @@
     - name: Update and upgrade apt packages
       become: ubuntu
       apt:
-        upgrade: yes
+        upgrade: 'yes'
         update_cache: yes
 
     - name: install apt-transport-https
@@ -47,7 +47,7 @@
     - name: Update and upgrade apt packages
       become: ubuntu
       apt:
-        upgrade: yes
+        upgrade: 'yes'
         update_cache: yes
 
     - name: Install kubelet kubeadm kubectl and kubernetes-cni

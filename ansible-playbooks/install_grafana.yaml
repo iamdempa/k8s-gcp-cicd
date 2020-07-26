@@ -1,5 +1,5 @@
 ---
-- hosts: kube-master
+- hosts: kube_master
   tasks:
     - name: Docker install Grafana
       become: true
