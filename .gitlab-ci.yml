@@ -4,7 +4,7 @@ image:
 stages:
   - create-ssh-key-pair
   - prerequisites
-  - install-terraform
+  # - install-terraform
   - deploy
   - restart-sshd
   - test-ansible
@@ -52,18 +52,18 @@ install-dependencies:
   tags:
     - gitlab-org
 
-install_terraform:
-  stage: install-terraform
-  script:
-    - export VER="0.13.0-beta3"
-    - wget https://releases.hashicorp.com/terraform/${VER}/terraform_${VER}_linux_amd64.zip
-    - unzip terraform_${VER}_linux_amd64.zip
-    - mv terraform /usr/local/bin/
-    - pwd
-    - rm -rf terraform_${VER}_linux_amd64.zip
-    - which terraform
-  tags:
-    - gitlab-org
+# install_terraform:
+#   stage: install-terraform
+#   script:
+#     - export VER="0.13.0-beta3"
+#     - wget https://releases.hashicorp.com/terraform/${VER}/terraform_${VER}_linux_amd64.zip
+#     - unzip terraform_${VER}_linux_amd64.zip
+#     - mv terraform /usr/local/bin/
+#     - pwd
+#     - rm -rf terraform_${VER}_linux_amd64.zip
+#     - which terraform
+#   tags:
+#     - gitlab-org
 
 deploy:
   stage: deploy
@@ -115,8 +115,10 @@ restart-sshd:
     - cat /etc/ssh/ssh_config
     # - cd ~/.ssh
     # - systemctl restart sshd
-    - ls
+
     - cat hosts
+    - ls
+    - pwd    
   tags:
     - gitlab-org
 
@@ -128,6 +130,7 @@ test-ansible:
       - always
   script:
     - ansible -m ping all
+    - pwd     
     - ls
   when: delayed
   start_in: 1 minutes
@@ -144,8 +147,8 @@ ansible-playbooks:
       - always
   script:
     - echo "ansible"
+    - pwd     
     - ls
-    - pwd
     - cat hosts
     - ansible-playbook -i hosts ./ansible-playbooks/master_and_minions.yaml
     - ansible-playbook -i hosts ./ansible-playbooks/master.yaml
