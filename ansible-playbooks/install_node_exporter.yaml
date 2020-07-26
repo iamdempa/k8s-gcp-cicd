@@ -17,7 +17,7 @@
       become: true
       shell: |
         cd /tmp/node_exporter
-        tar -zxvf $VERSION.tar.gz
+        tar -zxvf node_exporter-1.0.1.linux-amd64.tar.gz
 
     - name: Execute
       become: true
