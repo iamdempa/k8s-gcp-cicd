@@ -107,9 +107,9 @@ ansible-playbooks:
       - always
   script:
     - echo "ansible"
-    - ansible-playbook ./ansible-playbooks/master_and_minions.yaml
-    - ansible-playbook ./ansible-playbooks/master.yaml
-    - ansible-playbook ./ansible-playbooks/join_master_and_hosts.yaml
+    # - ansible-playbook ./ansible-playbooks/master_and_minions.yaml
+    # - ansible-playbook ./ansible-playbooks/master.yaml
+    # - ansible-playbook ./ansible-playbooks/join_master_and_hosts.yaml
   when: delayed
   start_in: 10 seconds
   tags:

@@ -1,6 +1,12 @@
 ---
 - hosts: kube_master
   tasks:
+
+    - name: Install docker
+      become: true
+      shell: |
+        apt-get remove docker docker-engine docker.io && apt install docker.io && systemctl start docker && systemctl enable docker
+
     - name: Create /opt/docker/prommetheus
       become: true
       shell: |
