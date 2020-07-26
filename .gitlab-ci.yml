@@ -118,7 +118,7 @@ destroy_if_failed:
   script:
     - terraform init
     - terraform destroy --auto-approve
-  when: on_failure
+  # when: on_failure
   tags:
     - banuka
 
