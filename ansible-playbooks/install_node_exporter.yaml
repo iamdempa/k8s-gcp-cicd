@@ -4,22 +4,23 @@
     - name: Download node_exporter
       become: true
       shell: |
-        wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
-
+        export DIRECTORY=node_exporter-1.0.1.linux-amd64
+        export VERSION="node_exporter-1.0.1.linux-amd64"
+        if [ -d $DIRECTORY ] 
+        then
+          rm -rf node_*
+          wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/${VERSION}.tar.gz
+        else
+          wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/${VERSION}.tar.gz
+        fi      
+        
     - name: Extract
       become: true
       shell: |
-        DIRECTORY=node_exporter-1.0.1.linux-amd64
-        if [ -d $DIRECTORY ] 
-        then
-            rm -rf node_ex*
-        else
-            tar -zxvf node_exporter-1.0.1.linux-amd64.tar.gz
-        fi
-        
+        tar -zxvf ${VERSION}.tar.gz
 
     - name: Execute
       become: true
       shell: |
-        cd node_exporter-1.0.1.linux-amd64
+        cd ${VERSION}
         ./node_exporter &               
