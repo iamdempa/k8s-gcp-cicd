@@ -142,6 +142,7 @@ resource "google_compute_instance" "kube-minion" {
     Name = "minion-${count.index}"
   }
 
+
   metadata_startup_script = <<-EOF
               #!/bin/bash    
               sudo apt-get update -y
