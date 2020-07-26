@@ -9,9 +9,17 @@
     - name: Extract
       become: true
       shell: |
-        tar -zxvf node_exporter-1.0.1.linux-amd64.tar.gz && cd node_exporter-1.0.1.linux-amd64.tar.gz
+        DIRECTORY=node_exporter-1.0.1.linux-amd64
+        if [ -d $DIRECTORY ] 
+        then
+            rm -rf node_ex*
+        else
+            tar -zxvf node_exporter-1.0.1.linux-amd64.tar.gz
+        fi
+        
 
     - name: Execute
       become: true
       shell: |
+        cd node_exporter-1.0.1.linux-amd64
         ./node_exporter &               
