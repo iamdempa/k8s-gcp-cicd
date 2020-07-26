@@ -24,7 +24,6 @@ create-ssh-key-pair:
       else 
           ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
       fi
-    # - sudo echo $PUBLICKEYNEW > ~/.ssh/gitlabnew.pub
     - echo $PUBLICKEYNEW > ~/.ssh/gitlabnew.pub
     - chmod 400 ~/.ssh/gitlabnew.pub
 
@@ -46,7 +45,6 @@ install_terraform:
     - export VER="0.13.0-beta3"
     - wget https://releases.hashicorp.com/terraform/${VER}/terraform_${VER}_linux_amd64.zip
     - unzip terraform_${VER}_linux_amd64.zip
-    # - sudo mv terraform /usr/local/bin/
     - mv terraform /usr/local/bin/
     - pwd
     - rm -rf terraform_${VER}_linux_amd64.zip
