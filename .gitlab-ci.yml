@@ -7,7 +7,7 @@ stages:
   - test-ansible
   - ansible-playbooks
 
-  - install-prometheus
+  - prometheus-node-exporter-grafana
   - install-node-exporter
 
   - destroy
@@ -118,17 +118,17 @@ ansible-playbooks:
     - banuka
 
 install-prometheus:
-  stage: install-prometheus
+  stage: prometheus-node-exporter-grafana
   script:
     - echo "Installing Prometheus"
     - ansible-playbook ./ansible-playbooks/install_prometheus.yaml
-    - systemctl status docker 
-    - docker ps
+    - sudo systemctl status docker 
+    - sudo docker ps
   tags:
     - banuka    
 
 install-node-exporter:
-  stage: install-node-exporter
+  stage: prometheus-node-exporter-grafana
   script:
     - ansible-playbook ./ansible-playbooks/install_node_exporter.yaml
   tags:
