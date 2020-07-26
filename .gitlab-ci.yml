@@ -1,10 +1,6 @@
-image:
-  name: 19950818/banu-terraform-ansible-cicd:v1.3
-  
-
 stages:
   - create-ssh-key-pair
-  - prerequisites
+  - prerequisites-install
   - install-terraform
   - deploy
   - restart-sshd
@@ -17,86 +13,53 @@ create-ssh-key-pair:
   script:
     - pwd
     - mkdir -p ~/.ssh
-
-    # key is genereated ONLY for ansible use
-    # ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
     - |
-      # !/bin/bash
+      #!/bin/bash
       FILE=~/.ssh/id_rsa
       if [ -f "$FILE" ]; then
-        echo "$FILE exists."
-        echo "removing the file and generating a new one"
-        cd ~/.ssh
-        rm -rf id_rsa id_rsa.pub
-        echo -e "\n"| ssh-keygen -t rsa -N ""
+          echo "$FILE exists."
       else 
-        echo -e "\n"|ssh-keygen -t rsa -N ""      
+          ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
       fi
-
-    # to log into master node/minions, this key will be picked by terraform and place in each node
+    # - sudo echo $PUBLICKEYNEW > ~/.ssh/gitlabnew.pub
     - echo $PUBLICKEYNEW > ~/.ssh/gitlabnew.pub
     - chmod 400 ~/.ssh/gitlabnew.pub
-    - cp ~/.ssh/id_rsa.pub ${CI_PROJECT_DIR}
-  artifacts:
-    paths:
-      - ./id_rsa.pub
 
   tags:
-    - gitlab-org
+    - banuka
 
-install-dependencies:
-  stage: prerequisites
+prerequisites-install:
+  stage: prerequisites-install
   script:
-    - cat id_rsa.pub
     - echo "hi"
-    - yum update -y && yum install wget unzip -y
+    # - sudo yum update -y && sudo yum install wget unzip -y
+    - yum update -y && sudo yum install wget unzip -y
   tags:
-    - gitlab-org
-
+    - banuka
+    
 install_terraform:
   stage: install-terraform
   script:
-    - export VER="0.13.0-beta3"
+    - export VER="0.12.9"
     - wget https://releases.hashicorp.com/terraform/${VER}/terraform_${VER}_linux_amd64.zip
     - unzip terraform_${VER}_linux_amd64.zip
+    # - sudo mv terraform /usr/local/bin/
     - mv terraform /usr/local/bin/
     - pwd
     - rm -rf terraform_${VER}_linux_amd64.zip
     - which terraform
   tags:
-    - gitlab-org
+    - banuka
 
 deploy:
   stage: deploy
   script:
-    - |
-      # !/bin/bash
-      KNOWNHOSTS=~/.ssh/known_hosts
-      if [ -f "$KNOWNHOSTS" ]; then
-        echo "$KNOWNHOSTS exists."  
-        echo "" > ~/.ssh/known_hosts      
-      else 
-        mkdir -p ~/.ssh && touch ~/.ssh/known_hosts          
-      fi
-    - |
-      #!/bin/bash
-      ANSIBLEHOSTS=/etc/ansible/hosts
-      if [ -f "$ANSIBLEHOSTS" ]; then
-          echo "$ANSIBLEHOSTS exists."
-      else 
-          mkdir -p /etc/ansible/ && touch /etc/ansible/hosts
-      fi
-    - cat /etc/ansible/hosts
-    - cat /etc/ansible/hosts
-    - cp /etc/ansible/hosts ${CI_PROJECT_DIR}    
+    - echo "" > ~/.ssh/known_hosts
     - terraform init
     - terraform plan
     - terraform apply --auto-approve
-  artifacts:
-    paths:
-      - ./hosts    
   tags:
-    - gitlab-org
+    - banuka
 
 restart-sshd:
   stage: restart-sshd
@@ -109,14 +72,16 @@ restart-sshd:
 
       grep -qwi "$string$" "$file" && \
       sed -i "s,\(^[^[:alnum:]]*\)\($string$\),\2,i" "$file" || \
-      echo "$string" >> "$file"
+      sudo echo "$string" >> "$file"
 
     - cat /etc/ssh/ssh_config
-    # - cd ~/.ssh
-    # - systemctl restart sshd
+    - mkdir -p /etc/ansible && touch /etc/ansible/hosts
+    - cat /etc/ansible/hosts
+    - cd ~/.ssh
+    - service sshd restart
     - ls
   tags:
-    - gitlab-org
+    - banuka
 
 test-ansible:
   stage: test-ansible
@@ -128,9 +93,9 @@ test-ansible:
     - ansible -m ping all
     - ls
   when: delayed
-  start_in: 1 minutes
+  start_in: 2 minutes
   tags:
-    - gitlab-org
+    - banuka
 
 ansible-playbooks:
   stage: ansible-playbooks
@@ -140,24 +105,22 @@ ansible-playbooks:
       - always
   script:
     - echo "ansible"
-    - ansible-playbook ./ansible-playbooks/master_and_minions.yaml
-    - ansible-playbook ./ansible-playbooks/master.yaml
-    - ansible-playbook ./ansible-playbooks/join_master_and_hosts.yaml
+    - ansible-playbook -i hosts ./ansible-playbooks/master_and_minions.yaml
+    - ansible-playbook -i hosts ./ansible-playbooks/master.yaml
+    - ansible-playbook -i hosts ./ansible-playbooks/join_master_and_hosts.yaml
   when: delayed
   start_in: 10 seconds
-  needs:
-    - job: test-ansible
   tags:
-    - gitlab-org
+    - banuka
 
-destroy-if-failed:
+destroy_if_failed:
   stage: destroy
   script:
     - terraform init
     - terraform destroy --auto-approve
   when: on_failure
   tags:
-    - gitlab-org  
+    - banuka
 
 destroy:
   stage: destroy
@@ -166,4 +129,4 @@ destroy:
     - terraform destroy --auto-approve
   when: manual
   tags:
-    - gitlab-org
+    - banuka
