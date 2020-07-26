@@ -141,6 +141,7 @@ ansible-playbooks:
       - always
   script:
     - echo "ansible"
+    - ls
     - cat hosts    
     - ansible-playbook -i hosts ./ansible-playbooks/master_and_minions.yaml
     - ansible-playbook -i hosts ./ansible-playbooks/master.yaml
