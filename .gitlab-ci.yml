@@ -92,7 +92,7 @@ deploy:
     - terraform plan
     - terraform apply --auto-approve
     - ls
-    - pwd 
+    - pwd
   artifacts:
     paths:
       - ./hosts
@@ -118,7 +118,10 @@ restart-sshd:
 
     - cat hosts
     - ls
-    - pwd    
+    - pwd
+  artifacts:
+    paths:
+      - ./hosts
   tags:
     - gitlab-org
 
@@ -130,14 +133,15 @@ test-ansible:
       - always
   script:
     - ansible -m ping all
-    - pwd     
+    - pwd
     - ls
   when: delayed
   start_in: 1 minutes
+  artifacts:
+    paths:
+      - ./hosts
   tags:
     - gitlab-org
-
-
 
 ansible-playbooks:
   stage: ansible-playbooks
@@ -147,7 +151,7 @@ ansible-playbooks:
       - always
   script:
     - echo "ansible"
-    - pwd     
+    - pwd
     - ls
     - cat hosts
     - ansible-playbook -i hosts ./ansible-playbooks/master_and_minions.yaml
