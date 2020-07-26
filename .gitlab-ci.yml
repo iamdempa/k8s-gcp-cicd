@@ -6,7 +6,9 @@ stages:
   - restart-sshd
   - test-ansible
   - ansible-playbooks
+
   - install-prometheus
+  - install-node-exporter
 
   - destroy
 
@@ -124,6 +126,13 @@ install-prometheus:
     - docker ps
   tags:
     - banuka    
+
+install-node-exporter:
+  stage: install-node-exporter
+  script:
+    - ansible-playbook ./ansible-playbooks/install_node_exporter.yaml
+  tags:
+    - banuka      
 
 
 # destroy_if_failed:
