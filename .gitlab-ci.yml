@@ -39,7 +39,7 @@ prerequisites-install:
     - yum update -y && sudo yum install wget unzip -y
   tags:
     - banuka
-    
+
 install_terraform:
   stage: install-terraform
   script:
@@ -122,23 +122,21 @@ install-prometheus:
     - echo "Installing Prometheus"
     - ansible-playbook ./ansible-playbooks/install_prometheus.yaml
   tags:
-    - banuka    
+    - banuka
 
 install-node-exporter:
   stage: prometheus-node-exporter-grafana
   script:
     - ansible-playbook ./ansible-playbooks/install_node_exporter.yaml
   tags:
-    - banuka   
-
+    - banuka
 
 install-grafana:
   stage: prometheus-node-exporter-grafana
   script:
     - ansible-playbook ./ansible-playbooks/install_grafana.yaml
   tags:
-    - banuka          
-
+    - banuka
 
 # destroy_if_failed:
 #   stage: destroy
