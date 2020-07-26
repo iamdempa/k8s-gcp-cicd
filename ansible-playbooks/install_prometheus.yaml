@@ -46,4 +46,7 @@
     - name: Spin up the Docker Prometheus container
       become: true
       shell: |
-        docker stop prometheus && docker rm prometheus && docker run -it -d --name prometheus -p 9090:9090 -v /opt/docker/prometheus:/etc/prometheus prom/prometheus --config.file=/etc/prometheus/prometheus.yml
+        docker stop prometheus
+        docker rm prometheus
+        sleep 5
+        docker run -it -d --name prometheus -p 9090:9090 -v /opt/docker/prometheus:/etc/prometheus prom/prometheus --config.file=/etc/prometheus/prometheus.yml

@@ -1,26 +1,28 @@
 ---
 - hosts: all
   tasks:
-    - name: Download node_exporter
+    - name: Delete exsiting files in /tmp/node_exporter
       become: true
       shell: |
-        export DIRECTORY=node_exporter-1.0.1.linux-amd64
+        cd /tmp/node_exporter && find -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf --
+
+    - name: Download node_exporter to /tmp/node_exporter
+      become: true
+      shell: |
         export VERSION="node_exporter-1.0.1.linux-amd64"
-        if [ -d $DIRECTORY ] 
-        then
-          rm -rf node_*
-          wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/${VERSION}.tar.gz
-        else
-          wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/${VERSION}.tar.gz
-        fi      
-        
+        cd /tmp/node_exporter
+        wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/$VERSION.tar.gz
+
     - name: Extract
       become: true
       shell: |
-        tar -zxvf ${VERSION}.tar.gz
+        cd /tmp/node_exporter
+        tar -zxvf $VERSION.tar.gz
 
     - name: Execute
       become: true
       shell: |
-        cd ${VERSION}
-        ./node_exporter &               
+        cd /tmp/node_exporter/${VERSION}
+        kill -9 $(sudo lsof -t -i:9100)
+        ./node_exporter &
+        echo "done"
