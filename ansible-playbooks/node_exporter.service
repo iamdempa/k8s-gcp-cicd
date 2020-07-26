@@ -1,0 +1,9 @@
+[Unit]
+Description=Service for prometheus to scrape metrics
+
+[Service]
+User=prometheus
+ExecStart=/usr/bin/node_exporter
+
+[Install]
+WantedBy=multi-user.target
