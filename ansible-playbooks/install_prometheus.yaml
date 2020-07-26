@@ -1,0 +1,13 @@
+---
+- hosts: kube-master
+  tasks:
+    - name: Create /opt/docker/prommetheus
+      become: true
+      shell: |
+        mkdir -p /opt/docker/prometheus && touch /opt/docker/prometheus/prometheus.yml
+    
+    - name: Spin up the Docker Prometheus container
+      become: true
+      shell: |
+        docker run -it -d --name prometheus -p 9090:9090 -v /opt/docker/prometheus:/etc/prometheus prom/prometheus --config.file=/etc/prometheus/prometheus.yml
+    

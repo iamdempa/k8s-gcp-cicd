@@ -6,6 +6,8 @@ stages:
   - restart-sshd
   - test-ansible
   - ansible-playbooks
+  - install-prometheus
+
   - destroy
 
 create-ssh-key-pair:
@@ -113,14 +115,22 @@ ansible-playbooks:
   tags:
     - banuka
 
-destroy_if_failed:
-  stage: destroy
+install-prometheus:
+  stage: install-prometheus
   script:
-    - terraform init
-    - terraform destroy --auto-approve
-  # when: on_failure
-  tags:
-    - banuka
+    - echo "Installing Prometheus"
+    - ansible-playbook ./ansible-playbooks/install_prometheus.yaml
+    - docker ps
+
+
+# destroy_if_failed:
+#   stage: destroy
+#   script:
+#     - terraform init
+#     - terraform destroy --auto-approve
+#   when: on_failure
+#   tags:
+#     - banuka
 
 destroy:
   stage: destroy

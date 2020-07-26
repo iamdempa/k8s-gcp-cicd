@@ -22,8 +22,8 @@ resource "google_compute_network" "kubernetes-vpc" {
 }
 
 # adding a firewall to the VPC
-resource "google_compute_firewall" "kube-master-firewall" {
-  name    = "kube-master-firewall"
+resource "google_compute_firewall" "kubernetes-ssh-all" {
+  name    = "kubernetes-ssh-all"
   network = google_compute_network.kubernetes-vpc.name
 
   # ssh access 
@@ -32,9 +32,28 @@ resource "google_compute_firewall" "kube-master-firewall" {
     ports    = ["22"]
   }
 
-  # source_tags = ["kube-master-firewall", "0.0.0.0/0"]
+  # source_tags = ["kubernetes-ssh-all", "0.0.0.0/0"]
   source_ranges = ["0.0.0.0/0"]
 }
+
+# rule to access grafana 
+resource "google_compute_firewall" "firewall-grafana" {
+  name    = "firewall-grafana"
+  network = google_compute_network.kubernetes-vpc.name
+  direction = "INGRESS"
+  priority    = 9
+
+  # ssh access 
+  allow {
+    protocol = "tcp"
+    ports    = ["80", "9090", "3000"]
+  }
+
+  # source_tags = ["kubernetes-ssh-all", "0.0.0.0/0"]
+  source_ranges = ["0.0.0.0/0"]
+  target_tags = ["kube-master"]
+}
+
 resource "google_compute_firewall" "kube-master-join-minions" {
   name    = "kube-master-join-minions"
   network = google_compute_network.kubernetes-vpc.name
@@ -52,6 +71,7 @@ resource "google_compute_firewall" "kube-master-join-minions" {
 # adding a route to the VPC to the internet gateway
 resource "google_compute_route" "internet-gateway" {
   name        = "internate-gateway"
+  direction = "EGRESS"
   dest_range  = "0.0.0.0/0"
   network     = google_compute_network.kubernetes-vpc.name
   next_hop_gateway = "global/gateways/default-internet-gateway"
@@ -110,7 +130,7 @@ resource "google_compute_instance" "kube-master" {
               sudo apt install python -y
               sudo echo 'ok' > /root/hi.txt
               sudo mkdir -p /root/.ssh/ && touch /root/.ssh/authorized_keys
-              sudo echo "${file("/root/.ssh/id_rsa.pub")}" >> /root/.ssh/authorized_keys                      
+              sudo echo "${file("/root/.ssh/id_rsa.pub")}" >> /root/.ssh/authorized_keys  
             EOF
   # metadata_startup_script = "echo hi > /test.txt"
 }
