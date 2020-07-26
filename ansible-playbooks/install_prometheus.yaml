@@ -5,7 +5,7 @@
     - name: Install docker
       become: true
       shell: |
-        apt-get remove docker docker-engine docker.io && apt install docker.io && systemctl start docker && systemctl enable docker
+        apt install apt-transport-https ca-certificates curl software-properties-common && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" && apt update && apt-cache policy docker-ce && apt install docker-ce && systemctl enable docker && systemctl status docker        
 
     - name: Create /opt/docker/prommetheus
       become: true

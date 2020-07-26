@@ -1,6 +1,12 @@
 ---
 - hosts: kube_master
   tasks:
+
+    - name: Check docker installed
+      become: true
+      shell: |
+        systemctl status docker
+
     - name: Docker install Grafana
       become: true
       shell: |
