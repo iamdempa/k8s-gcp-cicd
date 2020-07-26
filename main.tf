@@ -97,6 +97,7 @@ resource "google_compute_subnetwork" "minions-sub" {
   private_ip_google_access = "true"
 }
 
+
 resource "google_compute_instance" "kube-master" {
   name         = "kube-master"
   machine_type = var.machine_type
@@ -203,6 +204,40 @@ EOD
 
  }
 
+
+# prometheus.yaml file 
+
+resource "null_resource" "prometheus-yaml" {
+
+ triggers  = {
+    key = "${uuid()}"
+  }
+
+
+  provisioner "local-exec" {
+      command = "mkdir -p /tmp/prometheus"
+  }
+
+
+  provisioner "local-exec" {
+        command = <<EOD
+cat <<EOF > /tmp/prometheus/prometheus.yml
+global:
+  scrape_interval: 5s
+  external_labels:
+    monitor: 'codelab-monitor'
+
+scrape_configs:
+  - job_name: 'kub-master'
+    scrape_interval: 5s
+
+    static_configs:
+      - targets: ['${google_compute_instance.kube-master.network_interface.0.access_config.0.nat_ip}:9100']   
+EOF
+EOD
+  }
+
+ }
 
 
 output "master-ip" {

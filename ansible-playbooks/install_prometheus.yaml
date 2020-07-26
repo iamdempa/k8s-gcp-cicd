@@ -1,48 +1,17 @@
 ---
 - hosts: kube_master
   tasks:
+    - name: Create opt directory for prometheus
+      file:
+        path: /opt/docker/prometheus
+        state: directory
 
-    # - name: Remove previous docker versions if exists
-    #   become: true
-    #   shell: |
-    #     apt-get remove docker docker-engine docker.io containerd runc -y
-
-    # - name: Install essential Docker packages
-    #   become: true
-    #   shell: |
-    #     apt-mark hold google-cloud-sdk && sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y 
-
-    # - name: Add Dockerfile's official GPG key
-    #   become: true
-    #   shell: |
-    #     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -  
-
-    # - name: Add Docker package to apt repository
-    #   become: true
-    #   shell: |
-    #     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" 
-
-    # - name: Update the repository
-    #   become: true
-    #   shell: |
-    #     apt-mark hold google-cloud-sdk && apt-get update -y 
-
-    # - name: Install the Docker
-    #   become: true
-    #   shell: |
-    #     apt-get install docker-ce docker-ce-cli containerd.io -y
-
-    # - name: Restasrt and Enable docker 
-    #   become: true
-    #   shell: |
-    #     systemctl restart docker && systemctl enable docker 
-
-
-    - name: Create /opt/docker/prommetheus
+    - name: Copy the prometheus.yml
       become: true
-      shell: |
-        mkdir -p /opt/docker/prometheus && touch /opt/docker/prometheus/prometheus.yml
-    
+      copy:
+        src: /tmp/prometheus/prometheus.yml
+        dest: /opt/docker/prometheus/prometheus.yml   
+
     - name: Spin up the Docker Prometheus container
       become: true
       shell: |
