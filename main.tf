@@ -62,7 +62,7 @@ resource "google_compute_route" "internet-gateway" {
 resource "google_compute_subnetwork" "master-sub" {
   name          = "master"
   ip_cidr_range = var.master_cidr
-  region        = var.master_region
+  region        = var.master_subnet_region
   network       = google_compute_network.kubernetes-vpc.name
   depends_on    = [google_compute_network.kubernetes-vpc]
   private_ip_google_access = "false"
@@ -72,7 +72,7 @@ resource "google_compute_subnetwork" "master-sub" {
 resource "google_compute_subnetwork" "minions-sub" {
   name          = "minion"
   ip_cidr_range = var.minion_cidr
-  region        = var.minion_region
+  region        = var.minion_subnet_region
   network       = google_compute_network.kubernetes-vpc.name
   depends_on    = [google_compute_network.kubernetes-vpc]
   private_ip_google_access = "true"

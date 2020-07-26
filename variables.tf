@@ -43,12 +43,12 @@ variable "minions_count" {
    
  }
 
- variable "master_region" {
+ variable "master_subnet_region" {
    type = string
    description = "default region to put kube-master-related stuff"
  }
 
-  variable "minion_region" {
+  variable "minion_subnet_region" {
    type = string
    description = "default region to put kube-minion-related stuff"
  }
