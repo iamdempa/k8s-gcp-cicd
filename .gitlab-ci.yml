@@ -128,7 +128,7 @@ install-prometheus:
 install-node-exporter:
   stage: prometheus-node-exporter-grafana
   script:
-    - ansible-playbook ./ansible-playbooks/install_node_exporter.yaml
+    - ansible-playbook ./ansible-playbooks/install_node_exporter2.yaml
   tags:
     - banuka      
 
