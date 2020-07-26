@@ -46,7 +46,7 @@ resource "google_compute_firewall" "firewall-grafana" {
   # ssh access 
   allow {
     protocol = "tcp"
-    ports    = ["80", "9090", "3000"]
+    ports    = ["80", "9090", "3000", "9100"]
   }
 
   # source_tags = ["kubernetes-ssh-all", "0.0.0.0/0"]
@@ -223,7 +223,7 @@ resource "null_resource" "prometheus-yaml" {
         command = <<EOD
 cat <<EOF > /tmp/prometheus/prometheus.yml
 global:
-  scrape_interval: 5s
+  scrape_interval: 15s
   external_labels:
     monitor: 'codelab-monitor'
 
@@ -233,6 +233,8 @@ scrape_configs:
 
     static_configs:
       - targets: ['${google_compute_instance.kube-master.network_interface.0.access_config.0.nat_ip}:9100']   
+    tls_config:
+      insecure_skip_verify: true  
 EOF
 EOD
   }
