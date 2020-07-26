@@ -8,7 +8,6 @@ stages:
   - ansible-playbooks
 
   - prometheus-node-exporter-grafana
-  - install-node-exporter
 
   - destroy
 
@@ -128,9 +127,17 @@ install-prometheus:
 install-node-exporter:
   stage: prometheus-node-exporter-grafana
   script:
-    - ansible-playbook ./ansible-playbooks/install_node_exporter2.yaml
+    - ansible-playbook ./ansible-playbooks/install_node_exporter.yaml
   tags:
-    - banuka      
+    - banuka   
+
+
+install-grafana:
+  stage: prometheus-node-exporter-grafana
+  script:
+    - ansible-playbook ./ansible-playbooks/install_grafana.yaml
+  tags:
+    - banuka          
 
 
 # destroy_if_failed:

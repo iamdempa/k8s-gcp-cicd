@@ -43,7 +43,7 @@ resource "google_compute_firewall" "firewall-grafana" {
   direction = "INGRESS"
   priority    = 9
 
-  # ssh access 
+  # ports for node_exporters and grafana
   allow {
     protocol = "tcp"
     ports    = ["80", "9090", "3000", "9100"]
@@ -232,9 +232,21 @@ scrape_configs:
     scrape_interval: 5s
 
     static_configs:
-      - targets: ['${google_compute_instance.kube-master.network_interface.0.access_config.0.nat_ip}:9100']   
+      - targets: ['${google_compute_instance.kube-master.network_interface.0.access_config.0.nat_ip}:9100']  
+        labels:
+          group: 'kube-master' 
     tls_config:
       insecure_skip_verify: true  
+
+  - job_name: 'kub-minions'
+    scrape_interval: 5s
+
+    static_configs:
+      - targets: ['${google_compute_instance.kube-minion[0].network_interface.0.access_config.0.nat_ip}:9100', '${google_compute_instance.kube-minion[1].network_interface.0.access_config.0.nat_ip}:9100']  
+        labels:
+          group: 'kube-minions' 
+    tls_config:
+      insecure_skip_verify: true       
 EOF
 EOD
   }

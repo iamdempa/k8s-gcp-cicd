@@ -1,31 +1,44 @@
 ---
 - hosts: all
+  become: true
+  vars:
+    node_exporter_version: 0.14.0
   tasks:
-    - name: Delete exsiting files in /tmp/node_exporter
-      become: true
-      shell: |
-        mkdir -p /tmp/node_exporter
-        cd /tmp/node_exporter && find -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf --
+    - name: create group
+      group:
+        name: prometheus
+        state: present
+    - name: create user
+      user:
+        name: prometheus
+        group: prometheus
+        createhome: no
+        system: yes
+        state: present
 
-    - name: Download node_exporter to /tmp/node_exporter
-      become: true
-      shell: |
-        export VERSION="node_exporter-1.0.1.linux-amd64"
-        cd /tmp/node_exporter
-        wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/$VERSION.tar.gz
+    - name: download node exporter
+      get_url:
+        url: https://github.com/prometheus/node_exporter/releases/download/v{{ node_exporter_version }}/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz
+        dest: /opt/prometheus
+    - name: unarchive node exporter
+      unarchive:
+        remote_src: yes
+        src: /opt/prometheus/node_exporter-{{ node_exporter_version }}.linux-amd64.tar.gz
+        dest: /opt/prometheus
+    - name: Create a symlink to node exporter
+      file:
+        path: /usr/bin/node_exporter
+        state: link
+        src: /opt/prometheus/node_exporter-{{ node_exporter_version }}.linux-amd64/node_exporter
 
-    - name: Extract
-      become: true
-      shell: |
-        cd /tmp/node_exporter
-        tar -zxvf node_exporter-1.0.1.linux-amd64.tar.gz
+    - name: Install unit file to systemd
+      template:
+        src: node_exporter.service
+        dest: /etc/systemd/system/node_exporter.service
 
-    - name: Execute
-      become: true
-      shell: |
-        cd /tmp/node_exporter/${VERSION}
-        kill -9 $(sudo lsof -t -i:9100)
-        ./node_exporter
-      register: outp
-
-    - debug: msg="{{ outp.stderr }}"        
+    - name: Configure systemd to use service
+      systemd:
+        daemon_reload: yes
+        enabled: yes
+        state: started
+        name: node_exporter.service
