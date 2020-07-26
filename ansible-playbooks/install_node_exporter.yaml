@@ -28,4 +28,4 @@
         ./node_exporter
       register: outp
 
-    - debug: msg="{{ outp.stdout }}"        
+    - debug: msg="{{ outp.stderr }}"        
