@@ -1,6 +1,5 @@
 image:
   name: 19950818/banu-terraform-ansible-cicd:v1.3
-  
 
 stages:
   - create-ssh-key-pair
@@ -88,13 +87,13 @@ deploy:
       fi
     - cat /etc/ansible/hosts
     - cat /etc/ansible/hosts
-    - cp /etc/ansible/hosts ${CI_PROJECT_DIR}    
+    - cp /etc/ansible/hosts ${CI_PROJECT_DIR}
     - terraform init
     - terraform plan
     - terraform apply --auto-approve
   artifacts:
     paths:
-      - ./hosts    
+      - ./hosts
   tags:
     - gitlab-org
 
@@ -143,7 +142,7 @@ ansible-playbooks:
     - echo "ansible"
     - ls
     - pwd
-    - cat hosts    
+    - cat hosts
     - ansible-playbook -i hosts ./ansible-playbooks/master_and_minions.yaml
     - ansible-playbook -i hosts ./ansible-playbooks/master.yaml
     - ansible-playbook -i hosts ./ansible-playbooks/join_master_and_hosts.yaml
@@ -161,7 +160,7 @@ destroy-if-failed:
     - terraform destroy --auto-approve
   when: on_failure
   tags:
-    - gitlab-org  
+    - gitlab-org
 
 destroy:
   stage: destroy
