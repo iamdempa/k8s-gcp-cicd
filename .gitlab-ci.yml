@@ -122,8 +122,6 @@ install-prometheus:
   script:
     - echo "Installing Prometheus"
     - ansible-playbook ./ansible-playbooks/install_prometheus.yaml
-    - sudo systemctl status docker 
-    - sudo docker ps
   tags:
     - banuka    
 

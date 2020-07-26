@@ -47,6 +47,7 @@
       become: true
       shell: |
         docker stop prometheus
+        sleep 2
         docker rm prometheus
         sleep 5
         docker run -it -d --name prometheus -p 9090:9090 -v /opt/docker/prometheus:/etc/prometheus prom/prometheus --config.file=/etc/prometheus/prometheus.yml

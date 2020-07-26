@@ -4,6 +4,7 @@
     - name: Delete exsiting files in /tmp/node_exporter
       become: true
       shell: |
+        mkdir -p /tmp/node_exporter
         cd /tmp/node_exporter && find -mindepth 1 -maxdepth 1 -print0 | xargs -0 rm -rf --
 
     - name: Download node_exporter to /tmp/node_exporter
