@@ -138,14 +138,14 @@ install-grafana:
   tags:
     - banuka
 
-# destroy_if_failed:
-#   stage: destroy
-#   script:
-#     - terraform init
-#     - terraform destroy --auto-approve
-#   when: on_failure
-#   tags:
-#     - banuka
+destroy_if_failed:
+  stage: destroy
+  script:
+    - terraform init
+    - terraform destroy --auto-approve
+  when: on_failure
+  tags:
+    - banuka
 
 destroy:
   stage: destroy
