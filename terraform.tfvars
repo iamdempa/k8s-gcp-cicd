@@ -15,7 +15,7 @@ machine_type = "e2-medium"
 master_subnet_region = "us-west2"
 master_zone = "us-west2-a"
 
-minion_subnet_region = "us-west-2"
+minion_subnet_region = "us-west2"
 minion_zone = "us-west2-b"
 
 master_cidr = "10.0.0.0/21"
