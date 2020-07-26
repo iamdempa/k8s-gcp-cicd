@@ -29,11 +29,12 @@ resource "google_compute_firewall" "kubernetes-ssh-all" {
   # ssh access 
   allow {
     protocol = "tcp"
-    ports    = ["22"]
+    ports    = ["22", "80", "9100", "9090"]
   }
 
   # source_tags = ["kubernetes-ssh-all", "0.0.0.0/0"]
   source_ranges = ["0.0.0.0/0"]
+  target_tags = ["kube-master"]
 }
 
 # rule to access grafana 
@@ -46,11 +47,11 @@ resource "google_compute_firewall" "firewall-grafana" {
   # ports for node_exporters and grafana
   allow {
     protocol = "tcp"
-    ports    = ["80", "9090", "3000", "9100"]
+    ports    = ["9100"]
   }
 
-  # source_tags = ["kubernetes-ssh-all", "0.0.0.0/0"]
-  source_ranges = ["0.0.0.0/0"]
+  source_tags = ["kube-master"]
+  # source_ranges = ["0.0.0.0/0"]
   target_tags = ["kube-master", "kube-minion"]
 }
 
