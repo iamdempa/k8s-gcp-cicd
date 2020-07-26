@@ -25,8 +25,7 @@
       shell: |
         cd /tmp/node_exporter/${VERSION}
         kill -9 $(sudo lsof -t -i:9100)
-        ./node_exporter &
-        echo "done"
+        ./node_exporter
       register: outp
 
     - debug: msg="{{ outp.stdout }}"        
