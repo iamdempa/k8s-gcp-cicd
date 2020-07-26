@@ -71,7 +71,6 @@ resource "google_compute_firewall" "kube-master-join-minions" {
 # adding a route to the VPC to the internet gateway
 resource "google_compute_route" "internet-gateway" {
   name        = "internate-gateway"
-  direction = "EGRESS"
   dest_range  = "0.0.0.0/0"
   network     = google_compute_network.kubernetes-vpc.name
   next_hop_gateway = "global/gateways/default-internet-gateway"
