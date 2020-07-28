@@ -1,18 +1,13 @@
 stages:
-  - create-ssh-key-pair
-  - prerequisites-install
-  - install-terraform
-  - deploy
-  - restart-sshd
-  - test-ansible
-  - ansible-playbooks
+  - PREREQUISITES
+  - BUILD-INFRASTRUCTURE
+  - CONFIG-ANSIBLE
+  - MONITORING
 
-  - prometheus-node-exporter-grafana
-
-  - destroy
+  - DESTROY
 
 create-ssh-key-pair:
-  stage: create-ssh-key-pair
+  stage: PREREQUISITES
   script:
     - pwd
     - mkdir -p ~/.ssh
@@ -31,7 +26,7 @@ create-ssh-key-pair:
     - banuka-gcp
 
 prerequisites-install:
-  stage: prerequisites-install
+  stage: PREREQUISITES
   script:
     - echo "hi"
     # - sudo yum update -y && sudo yum install wget unzip -y
@@ -40,7 +35,7 @@ prerequisites-install:
     - banuka-gcp
 
 install_terraform:
-  stage: install-terraform
+  stage: PREREQUISITES
   script:
     - export VER="0.13.0-beta3"
     - wget https://releases.hashicorp.com/terraform/${VER}/terraform_${VER}_linux_amd64.zip
@@ -53,7 +48,7 @@ install_terraform:
     - banuka-gcp
 
 deploy:
-  stage: deploy
+  stage: BUILD-INFRASTRUCTURE
   script:
     - echo "" > ~/.ssh/known_hosts
     - terraform init
@@ -63,7 +58,7 @@ deploy:
     - banuka-gcp
 
 restart-sshd:
-  stage: restart-sshd
+  stage: BUILD-INFRASTRUCTURE
   script:
     - pwd
     - export ANSIBLE_HOST_KEY_CHECKING=False
@@ -85,7 +80,7 @@ restart-sshd:
     - banuka-gcp
 
 test-ansible:
-  stage: test-ansible
+  stage: CONFIG-ANSIBLE
   retry:
     max: 2
     when:
@@ -99,7 +94,7 @@ test-ansible:
     - banuka-gcp
 
 ansible-playbooks:
-  stage: ansible-playbooks
+  stage: CONFIG-ANSIBLE
   retry:
     max: 2
     when:
@@ -114,30 +109,30 @@ ansible-playbooks:
   tags:
     - banuka-gcp
 
+install-node-exporter:
+  stage: MONITORING
+  script:
+    - ansible-playbook ./ansible-playbooks/node_exporter/install_node_exporter.yaml
+  tags:
+    - banuka-gcp
+
 install-prometheus:
-  stage: prometheus-node-exporter-grafana
+  stage: MONITORING
   script:
     - echo "Installing Prometheus"
     - ansible-playbook ./ansible-playbooks/prometheus/install_prometheus.yaml
   tags:
     - banuka-gcp
 
-install-node-exporter:
-  stage: prometheus-node-exporter-grafana
-  script:
-    - ansible-playbook ./ansible-playbooks/node_exporter/install_node_exporter.yaml
-  tags:
-    - banuka-gcp
-
 install-grafana:
-  stage: prometheus-node-exporter-grafana
+  stage: MONITORING
   script:
     - ansible-playbook ./ansible-playbooks/grafana/install_grafana.yaml
   tags:
     - banuka-gcp
 
 destroy_if_failed:
-  stage: destroy
+  stage: DESTROY
   script:
     - terraform init
     - terraform destroy --auto-approve
@@ -146,7 +141,7 @@ destroy_if_failed:
     - banuka-gcp
 
 destroy:
-  stage: destroy
+  stage: DESTROY
   script:
     - terraform init
     - terraform destroy --auto-approve
