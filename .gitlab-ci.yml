@@ -8,7 +8,7 @@ stages:
 
 create-ssh-key-pair:
   stage: PREREQUISITES
-  resource_group: prerequisites
+  # resource_group: prerequisites
   script:
     - pwd
     - mkdir -p ~/.ssh
@@ -22,23 +22,24 @@ create-ssh-key-pair:
       fi
     - echo $PUBLICKEYNEW > ~/.ssh/gitlabnew.pub
     - chmod 400 ~/.ssh/gitlabnew.pub
-
   tags:
     - banuka-gcp
 
-prerequisites-install:
+z-prerequisites:
   stage: PREREQUISITES
-  resource_group: prerequisites
+  # resource_group: prerequisites
   script:
     - echo "hi"
     # - sudo yum update -y && sudo yum install wget unzip -y
     - yum update --exclude=google-cloud-sdk -y && sudo yum install wget unzip -y
+  needs:
+    - create-ssh-key-pair
   tags:
     - banuka-gcp
 
-install_terraform:
+install-terraform:
   stage: PREREQUISITES
-  resource_group: prerequisites
+  # resource_group: prerequisites
   script:
     - export VER="0.13.0-beta3"
     - wget https://releases.hashicorp.com/terraform/${VER}/terraform_${VER}_linux_amd64.zip
@@ -47,6 +48,8 @@ install_terraform:
     - pwd
     - rm -rf terraform_${VER}_linux_amd64.zip
     - which terraform
+  needs:
+    - check-prerequisites   
   tags:
     - banuka-gcp
 
@@ -116,7 +119,7 @@ ansible-playbooks:
   tags:
     - banuka-gcp
 
-install-node-exporter:
+a-node-exporter:
   stage: MONITORING
   resource_group: monitoring
   script:
@@ -124,7 +127,7 @@ install-node-exporter:
   tags:
     - banuka-gcp
 
-install-prometheus:
+b-prometheus:
   stage: MONITORING
   resource_group: monitoring
   script:
@@ -133,7 +136,7 @@ install-prometheus:
   tags:
     - banuka-gcp
 
-install-grafana:
+c-grafana:
   stage: MONITORING
   resource_group: monitoring
   script:
