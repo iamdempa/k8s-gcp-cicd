@@ -8,7 +8,6 @@ stages:
 
 create-ssh-key-pair:
   stage: PREREQUISITES
-  resource_group: prerequisites
   script:
     - pwd
     - mkdir -p ~/.ssh
@@ -28,7 +27,8 @@ create-ssh-key-pair:
 
 prerequisites-install:
   stage: PREREQUISITES
-  resource_group: prerequisites
+  dependencies:
+    - create-ssh-key-pair
   script:
     - echo "hi"
     # - sudo yum update -y && sudo yum install wget unzip -y
@@ -38,7 +38,8 @@ prerequisites-install:
 
 install_terraform:
   stage: PREREQUISITES
-  resource_group: prerequisites
+  dependencies:
+    - prerequisites-install 
   script:
     - export VER="0.13.0-beta3"
     - wget https://releases.hashicorp.com/terraform/${VER}/terraform_${VER}_linux_amd64.zip
@@ -50,9 +51,8 @@ install_terraform:
   tags:
     - banuka-gcp
 
-deploy:
+build-gcp:
   stage: BUILD-INFRASTRUCTURE
-  resource_group: build
   script:
     - echo "" > ~/.ssh/known_hosts
     - terraform init
@@ -63,7 +63,8 @@ deploy:
 
 restart-sshd:
   stage: BUILD-INFRASTRUCTURE
-  resource_group: build
+  dependencies:
+    - build-gcp
   script:
     - pwd
     - export ANSIBLE_HOST_KEY_CHECKING=False
@@ -84,9 +85,8 @@ restart-sshd:
   tags:
     - banuka-gcp
 
-test-ansible:
+ansible-ping-test:
   stage: CONFIG-ANSIBLE
-  resource_group: ansible
   retry:
     max: 2
     when:
@@ -95,13 +95,14 @@ test-ansible:
     - ansible -m ping all
     - ls
   when: delayed
-  start_in: 1 minutes
+  start_in: 55 seconds
   tags:
     - banuka-gcp
 
 ansible-playbooks:
   stage: CONFIG-ANSIBLE
-  resource_group: ansible
+  dependencies:
+    - ansible-ping-test
   retry:
     max: 2
     when:
@@ -112,13 +113,12 @@ ansible-playbooks:
     - ansible-playbook ./ansible-playbooks/kubernetes/master.yaml
     - ansible-playbook ./ansible-playbooks/kubernetes/join_master_and_hosts.yaml
   when: delayed
-  start_in: 10 seconds
+  start_in: 1 minutes
   tags:
     - banuka-gcp
 
 install-node-exporter:
   stage: MONITORING
-  resource_group: monitoring
   script:
     - ansible-playbook ./ansible-playbooks/node_exporter/install_node_exporter.yaml
   tags:
@@ -126,7 +126,8 @@ install-node-exporter:
 
 install-prometheus:
   stage: MONITORING
-  resource_group: monitoring
+  dependencies:
+    - install-node-exporter 
   script:
     - echo "Installing Prometheus"
     - ansible-playbook ./ansible-playbooks/prometheus/install_prometheus.yaml
@@ -135,7 +136,8 @@ install-prometheus:
 
 install-grafana:
   stage: MONITORING
-  resource_group: monitoring
+  dependencies:
+    - install-prometheus  
   script:
     - ansible-playbook ./ansible-playbooks/grafana/install_grafana.yaml
   tags:
