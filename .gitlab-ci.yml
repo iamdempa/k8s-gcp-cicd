@@ -28,7 +28,7 @@ create-ssh-key-pair:
     - chmod 400 ~/.ssh/gitlabnew.pub
 
   tags:
-    - banuka
+    - banuka-gcp
 
 prerequisites-install:
   stage: prerequisites-install
@@ -37,7 +37,7 @@ prerequisites-install:
     # - sudo yum update -y && sudo yum install wget unzip -y
     - yum update -y && sudo yum install wget unzip -y
   tags:
-    - banuka
+    - banuka-gcp
 
 install_terraform:
   stage: install-terraform
@@ -50,7 +50,7 @@ install_terraform:
     - rm -rf terraform_${VER}_linux_amd64.zip
     - which terraform
   tags:
-    - banuka
+    - banuka-gcp
 
 deploy:
   stage: deploy
@@ -60,7 +60,7 @@ deploy:
     - terraform plan
     - terraform apply --auto-approve
   tags:
-    - banuka
+    - banuka-gcp
 
 restart-sshd:
   stage: restart-sshd
@@ -82,7 +82,7 @@ restart-sshd:
     - service sshd restart
     - ls
   tags:
-    - banuka
+    - banuka-gcp
 
 test-ansible:
   stage: test-ansible
@@ -96,7 +96,7 @@ test-ansible:
   when: delayed
   start_in: 1 minutes
   tags:
-    - banuka
+    - banuka-gcp
 
 ansible-playbooks:
   stage: ansible-playbooks
@@ -112,7 +112,7 @@ ansible-playbooks:
   when: delayed
   start_in: 10 seconds
   tags:
-    - banuka
+    - banuka-gcp
 
 install-prometheus:
   stage: prometheus-node-exporter-grafana
@@ -120,21 +120,21 @@ install-prometheus:
     - echo "Installing Prometheus"
     - ansible-playbook ./ansible-playbooks/prometheus/install_prometheus.yaml
   tags:
-    - banuka
+    - banuka-gcp
 
 install-node-exporter:
   stage: prometheus-node-exporter-grafana
   script:
     - ansible-playbook ./ansible-playbooks/node_exporter/install_node_exporter.yaml
   tags:
-    - banuka
+    - banuka-gcp
 
 install-grafana:
   stage: prometheus-node-exporter-grafana
   script:
     - ansible-playbook ./ansible-playbooks/grafana/install_grafana.yaml
   tags:
-    - banuka
+    - banuka-gcp
 
 destroy_if_failed:
   stage: destroy
@@ -143,7 +143,7 @@ destroy_if_failed:
     - terraform destroy --auto-approve
   when: on_failure
   tags:
-    - banuka
+    - banuka-gcp
 
 destroy:
   stage: destroy
@@ -152,4 +152,4 @@ destroy:
     - terraform destroy --auto-approve
   when: manual
   tags:
-    - banuka
+    - banuka-gcp
