@@ -8,7 +8,7 @@ stages:
 
 create-ssh-key-pair:
   stage: PREREQUISITES
-  # resource_group: prerequisites
+  resource_group: prerequisites
   script:
     - pwd
     - mkdir -p ~/.ssh
@@ -25,20 +25,19 @@ create-ssh-key-pair:
   tags:
     - banuka-gcp
 
-z-prerequisites:
+check-prerequisites:
   stage: PREREQUISITES
-  # resource_group: prerequisites
+  resource_group: prerequisites
   script:
     - echo "hi"
     # - sudo yum update -y && sudo yum install wget unzip -y
     - yum update --exclude=google-cloud-sdk -y && sudo yum install wget unzip -y
-  needs: ["create-ssh-key-pair"]
   tags:
     - banuka-gcp
 
 install-terraform:
   stage: PREREQUISITES
-  # resource_group: prerequisites
+  resource_group: prerequisites
   script:
     - export VER="0.13.0-beta3"
     - wget https://releases.hashicorp.com/terraform/${VER}/terraform_${VER}_linux_amd64.zip
@@ -47,7 +46,6 @@ install-terraform:
     - pwd
     - rm -rf terraform_${VER}_linux_amd64.zip
     - which terraform
-  needs: ["z-prerequisites"]
   tags:
     - banuka-gcp
 
