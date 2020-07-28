@@ -49,7 +49,7 @@ install-terraform:
     - rm -rf terraform_${VER}_linux_amd64.zip
     - which terraform
   needs:
-    - check-prerequisites   
+    - z-prerequisites
   tags:
     - banuka-gcp
 
