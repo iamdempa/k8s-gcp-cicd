@@ -26,7 +26,7 @@ resource "google_compute_firewall" "kubernetes-ssh-all" {
   name    = "kubernetes-ssh-all"
   network = google_compute_network.kubernetes-vpc.name
 
-  # ssh access 
+  # ssh access, node_exporter (9100) and promethues (9090)
   allow {
     protocol = "tcp"
     ports    = ["22", "80", "9100", "9090"]
@@ -63,6 +63,8 @@ resource "google_compute_firewall" "kube-master-join-minions" {
   allow {
     protocol = "all"
   }
+
+  # allow any traffic from kube-minion to kube-master 
   target_tags = ["kube-master"]
   source_tags = ["kube-minion"]
   # source_ranges = ["0.0.0.0/0"]
@@ -78,7 +80,7 @@ resource "google_compute_route" "internet-gateway" {
   priority    = 10
 }
 
-# create subnect for kube-master
+# create subnet for kube-master
 resource "google_compute_subnetwork" "master-sub" {
   name          = "master"
   ip_cidr_range = var.master_cidr

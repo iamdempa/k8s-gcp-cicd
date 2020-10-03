@@ -3,7 +3,6 @@ stages:
   - BUILD-INFRASTRUCTURE
   - CONFIG-ANSIBLE
   - MONITORING
-
   - DESTROY
 
 a-create-ssh-key-pair:
@@ -130,6 +129,11 @@ a-node-exporter:
   script:
     - echo "Installing node_exporter"  
     - ansible-playbook ./ansible-playbooks/node_exporter/install_node_exporter.yaml
+  only:
+    refs:
+      - branches
+    changes:
+      - ansible-playbooks/node_exporter/*     
   tags:
     - banuka-gcp
 
@@ -139,6 +143,11 @@ b-prometheus:
   script:
     - echo "Installing Prometheus"
     - ansible-playbook ./ansible-playbooks/prometheus/install_prometheus.yaml
+  only:
+    refs:
+      - branches
+    changes:
+      - ansible-playbooks/prometheus/*     
   tags:
     - banuka-gcp
 
@@ -148,6 +157,11 @@ c-grafana:
   script:
     - echo "Installing grafana"  
     - ansible-playbook ./ansible-playbooks/grafana/install_grafana.yaml
+  only:
+    refs:
+      - branches
+    changes:
+      - ansible-playbooks/grafana/*      
   tags:
     - banuka-gcp
 
