@@ -83,7 +83,7 @@ restart-sshd:
   tags:
     - banuka-gcp
 
-ansible-ping-test:
+a-ansible-ping-test:
   stage: CONFIG-ANSIBLE
   resource_group: ansible
   retry:
@@ -94,11 +94,11 @@ ansible-ping-test:
     - ansible -m ping all
     - ls
   when: delayed
-  start_in: 55 seconds
+  start_in: 59 seconds
   tags:
     - banuka-gcp
 
-ansible-playbooks:
+b-ansible-playbooks:
   stage: CONFIG-ANSIBLE
   resource_group: ansible
   retry:
@@ -106,12 +106,12 @@ ansible-playbooks:
     when:
       - always
   script:
-    - echo "ansible"
-    - ansible-playbook ./ansible-playbooks/kubernetes/master_and_minions.yaml
-    - ansible-playbook ./ansible-playbooks/kubernetes/master.yaml
-    - ansible-playbook ./ansible-playbooks/kubernetes/join_master_and_hosts.yaml
-  when: delayed
-  start_in: 1 minutes
+    - echo "ansible playbooks"
+    # - ansible-playbook ./ansible-playbooks/kubernetes/master_and_minions.yaml
+    # - ansible-playbook ./ansible-playbooks/kubernetes/master.yaml
+    # - ansible-playbook ./ansible-playbooks/kubernetes/join_master_and_hosts.yaml
+  # when: delayed
+  # start_in: 59 seconds
   tags:
     - banuka-gcp
 
@@ -119,7 +119,8 @@ a-node-exporter:
   stage: MONITORING
   resource_group: monitoring
   script:
-    - ansible-playbook ./ansible-playbooks/node_exporter/install_node_exporter.yaml
+    - echo "Installing node_exporter"  
+    # - ansible-playbook ./ansible-playbooks/node_exporter/install_node_exporter.yaml
   tags:
     - banuka-gcp
 
@@ -128,7 +129,7 @@ b-prometheus:
   resource_group: monitoring
   script:
     - echo "Installing Prometheus"
-    - ansible-playbook ./ansible-playbooks/prometheus/install_prometheus.yaml
+    # - ansible-playbook ./ansible-playbooks/prometheus/install_prometheus.yaml
   tags:
     - banuka-gcp
 
@@ -136,7 +137,8 @@ c-grafana:
   stage: MONITORING
   resource_group: monitoring
   script:
-    - ansible-playbook ./ansible-playbooks/grafana/install_grafana.yaml
+    - echo "Installing grafana"  
+    # - ansible-playbook ./ansible-playbooks/grafana/install_grafana.yaml
   tags:
     - banuka-gcp
 
