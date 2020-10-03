@@ -9,7 +9,7 @@ provider "google" {
 # Configure the backend
 terraform {
   backend "gcs" {
-    bucket      = "tf_backend_gcp_banuka_jana_jayarathna"
+    bucket      = "tf_backend_gcp_banuka_jana_jayarathna_k8s"
     prefix      = "terraform/state"
     credentials = "token.json"
   }

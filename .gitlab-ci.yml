@@ -140,14 +140,14 @@ c-grafana:
   tags:
     - banuka-gcp
 
-destroy_if_failed:
-  stage: DESTROY
-  script:
-    - terraform init
-    - terraform destroy --auto-approve
-  when: on_failure
-  tags:
-    - banuka-gcp
+# destroy_if_failed:
+#   stage: DESTROY
+#   script:
+#     - terraform init
+#     - terraform destroy --auto-approve
+#   when: on_failure
+#   tags:
+#     - banuka-gcp
 
 destroy:
   stage: DESTROY
