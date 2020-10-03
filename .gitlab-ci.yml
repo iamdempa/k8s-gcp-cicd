@@ -94,11 +94,11 @@ a-ansible-ping-test:
     - ls
   when: delayed
   start_in: 55 seconds
-  only:
-    refs:
-      - branches
-    changes:
-      - ansible-playbooks/kubernetes/*
+  # only:
+  #   refs:
+  #     - branches
+  #   changes:
+  #     - ansible-playbooks/kubernetes/*
   tags:
     - banuka-gcp
 
@@ -116,11 +116,11 @@ b-ansible-playbooks:
     - ansible-playbook ./ansible-playbooks/kubernetes/join_master_and_hosts.yaml
   when: delayed
   start_in: 59 seconds
-  only:
-    refs:
-      - branches
-    changes:
-      - ansible-playbooks/kubernetes/*
+  # only:
+  #   refs:
+  #     - branches
+  #   changes:
+  #     - ansible-playbooks/kubernetes/*
       # - Dockerfile
       # - docker/scripts/*
       # - dockerfiles/**/*
@@ -134,11 +134,11 @@ a-node-exporter:
   script:
     - echo "Installing node_exporter"
     - ansible-playbook ./ansible-playbooks/node_exporter/install_node_exporter.yaml
-  only:
-    refs:
-      - branches
-    changes:
-      - ansible-playbooks/node_exporter/*
+  # only:
+  #   refs:
+  #     - branches
+  #   changes:
+  #     - ansible-playbooks/node_exporter/*
   tags:
     - banuka-gcp
 
@@ -148,11 +148,11 @@ b-prometheus:
   script:
     - echo "Installing Prometheus"
     - ansible-playbook ./ansible-playbooks/prometheus/install_prometheus.yaml
-  only:
-    refs:
-      - branches
-    changes:
-      - ansible-playbooks/prometheus/*
+  # only:
+  #   refs:
+  #     - branches
+  #   changes:
+  #     - ansible-playbooks/prometheus/*
   tags:
     - banuka-gcp
 
@@ -162,11 +162,11 @@ c-grafana:
   script:
     - echo "Installing grafana"
     - ansible-playbook ./ansible-playbooks/grafana/install_grafana.yaml
-  only:
-    refs:
-      - branches
-    changes:
-      - ansible-playbooks/grafana/*
+  # only:
+  #   refs:
+  #     - branches
+  #   changes:
+  #     - ansible-playbooks/grafana/*
   tags:
     - banuka-gcp
 
