@@ -98,7 +98,7 @@ a-ansible-ping-test:
     refs:
       - branches
     changes:
-      - ansible-playbooks/kubernetes/*    
+      - ansible-playbooks/kubernetes/*
   tags:
     - banuka-gcp
 
@@ -110,7 +110,7 @@ b-ansible-playbooks:
     when:
       - always
   script:
-    - echo "ansible playbooks"  
+    - echo "ansible playbooks"
     - ansible-playbook ./ansible-playbooks/kubernetes/master_and_minions.yaml
     - ansible-playbook ./ansible-playbooks/kubernetes/master.yaml
     - ansible-playbook ./ansible-playbooks/kubernetes/join_master_and_hosts.yaml
@@ -120,11 +120,11 @@ b-ansible-playbooks:
     refs:
       - branches
     changes:
-      - ansible-playbooks/kubernetes/*    
+      - ansible-playbooks/kubernetes/*
       # - Dockerfile
       # - docker/scripts/*
       # - dockerfiles/**/*
-      # - more_scripts/*.{rb,py,sh}  
+      # - more_scripts/*.{rb,py,sh}
   tags:
     - banuka-gcp
 
@@ -132,13 +132,13 @@ a-node-exporter:
   stage: MONITORING
   resource_group: monitoring
   script:
-    - echo "Installing node_exporter"  
+    - echo "Installing node_exporter"
     - ansible-playbook ./ansible-playbooks/node_exporter/install_node_exporter.yaml
   only:
     refs:
       - branches
     changes:
-      - ansible-playbooks/node_exporter/*     
+      - ansible-playbooks/node_exporter/*
   tags:
     - banuka-gcp
 
@@ -152,7 +152,7 @@ b-prometheus:
     refs:
       - branches
     changes:
-      - ansible-playbooks/prometheus/*     
+      - ansible-playbooks/prometheus/*
   tags:
     - banuka-gcp
 
@@ -160,13 +160,13 @@ c-grafana:
   stage: MONITORING
   resource_group: monitoring
   script:
-    - echo "Installing grafana"  
+    - echo "Installing grafana"
     - ansible-playbook ./ansible-playbooks/grafana/install_grafana.yaml
   only:
     refs:
       - branches
     changes:
-      - ansible-playbooks/grafana/*      
+      - ansible-playbooks/grafana/*
   tags:
     - banuka-gcp
 
