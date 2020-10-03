@@ -94,6 +94,11 @@ a-ansible-ping-test:
     - ls
   when: delayed
   start_in: 55 seconds
+  only:
+    refs:
+      - branches
+    changes:
+      - ansible-playbooks/kubernetes/*    
   tags:
     - banuka-gcp
 
