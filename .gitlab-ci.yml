@@ -6,7 +6,7 @@ stages:
 
   - DESTROY
 
-create-ssh-key-pair:
+a-create-ssh-key-pair:
   stage: PREREQUISITES
   resource_group: prerequisites
   script:
@@ -25,7 +25,7 @@ create-ssh-key-pair:
   tags:
     - banuka-gcp
 
-check-prerequisites:
+b-check-prerequisites:
   stage: PREREQUISITES
   resource_group: prerequisites
   script:
@@ -35,7 +35,7 @@ check-prerequisites:
   tags:
     - banuka-gcp
 
-install-terraform:
+c-install-terraform:
   stage: PREREQUISITES
   resource_group: prerequisites
   script:
@@ -49,7 +49,7 @@ install-terraform:
   tags:
     - banuka-gcp
 
-build-gcp:
+a-build-gcp:
   stage: BUILD-INFRASTRUCTURE
   resource_group: build
   script:
@@ -60,7 +60,7 @@ build-gcp:
   tags:
     - banuka-gcp
 
-restart-sshd:
+b-restart-sshd:
   stage: BUILD-INFRASTRUCTURE
   resource_group: build
   script:
@@ -94,7 +94,7 @@ a-ansible-ping-test:
     - ansible -m ping all
     - ls
   when: delayed
-  start_in: 59 seconds
+  start_in: 55 seconds
   tags:
     - banuka-gcp
 
@@ -110,8 +110,8 @@ b-ansible-playbooks:
     # - ansible-playbook ./ansible-playbooks/kubernetes/master_and_minions.yaml
     # - ansible-playbook ./ansible-playbooks/kubernetes/master.yaml
     # - ansible-playbook ./ansible-playbooks/kubernetes/join_master_and_hosts.yaml
-  # when: delayed
-  # start_in: 59 seconds
+  when: delayed
+  start_in: 59 seconds
   tags:
     - banuka-gcp
 
