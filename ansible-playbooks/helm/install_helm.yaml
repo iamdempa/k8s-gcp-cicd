@@ -1,0 +1,13 @@
+---
+- hosts: kube_master
+  tasks:
+    - name: Helm
+      get_url:
+        url: curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+        dest: /root
+        mode: "700"
+
+    - name: Install Helm
+      become: true
+      shell: |
+        /root/get_helm.sh

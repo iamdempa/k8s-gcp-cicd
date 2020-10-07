@@ -170,6 +170,20 @@ c-grafana:
   tags:
     - banuka-gcp
 
+d-helm:
+  stage: MONITORING
+  resource_group: monitoring
+  script:
+    - echo "Installing Helm"
+    - ansible-playbook ./ansible-playbooks/helm/install_helm.yaml
+  # only:
+  #   refs:
+  #     - branches
+  #   changes:
+  #     - ansible-playbooks/grafana/*
+  tags:
+    - banuka-gcp
+
 # destroy_if_failed:
 #   stage: DESTROY
 #   script:
