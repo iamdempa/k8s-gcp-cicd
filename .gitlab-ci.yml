@@ -121,10 +121,10 @@ b-ansible-playbooks:
   #     - branches
   #   changes:
   #     - ansible-playbooks/kubernetes/*
-      # - Dockerfile
-      # - docker/scripts/*
-      # - dockerfiles/**/*
-      # - more_scripts/*.{rb,py,sh}
+  # - Dockerfile
+  # - docker/scripts/*
+  # - dockerfiles/**/*
+  # - more_scripts/*.{rb,py,sh}
   tags:
     - banuka-gcp
 
