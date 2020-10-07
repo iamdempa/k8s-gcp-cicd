@@ -111,9 +111,9 @@ b-ansible-playbooks:
       - always
   script:
     - echo "ansible playbooks"
-    - ansible-playbook ./ansible-playbooks/kubernetes/master_and_minions.yaml
-    - ansible-playbook ./ansible-playbooks/kubernetes/master.yaml
-    - ansible-playbook ./ansible-playbooks/kubernetes/join_master_and_hosts.yaml
+    # - ansible-playbook ./ansible-playbooks/kubernetes/master_and_minions.yaml
+    # - ansible-playbook ./ansible-playbooks/kubernetes/master.yaml
+    # - ansible-playbook ./ansible-playbooks/kubernetes/join_master_and_hosts.yaml
   when: delayed
   start_in: 59 seconds
   # only:
@@ -133,7 +133,7 @@ a-node-exporter:
   resource_group: monitoring
   script:
     - echo "Installing node_exporter"
-    - ansible-playbook ./ansible-playbooks/node_exporter/install_node_exporter.yaml
+    # - ansible-playbook ./ansible-playbooks/node_exporter/install_node_exporter.yaml
   # only:
   #   refs:
   #     - branches
@@ -147,7 +147,7 @@ b-prometheus:
   resource_group: monitoring
   script:
     - echo "Installing Prometheus"
-    - ansible-playbook ./ansible-playbooks/prometheus/install_prometheus.yaml
+    # - ansible-playbook ./ansible-playbooks/prometheus/install_prometheus.yaml
   # only:
   #   refs:
   #     - branches
@@ -161,7 +161,7 @@ c-grafana:
   resource_group: monitoring
   script:
     - echo "Installing grafana"
-    - ansible-playbook ./ansible-playbooks/grafana/install_grafana.yaml
+    # - ansible-playbook ./ansible-playbooks/grafana/install_grafana.yaml
   # only:
   #   refs:
   #     - branches
