@@ -4,6 +4,7 @@ zone = "us-east1-b"
 bucket_name = "tf_backend_gcp_banuka_jana_jayarathna"
 storage_class = "REGIONAL"
 
+# machine related varaibles
 public_key_path = "/root/.ssh/id_rsa.pub"
 gitlabnew_login_key_path = "/root/.ssh/gitlabnew.pub"
 private_key_path = "/root/.ssh/id_rsa"
