@@ -1,4 +1,4 @@
-# Provide 
+# Provider 
 provider "google" {
   credentials = "${file("token.json")}"
   project     = var.project_name
@@ -184,7 +184,7 @@ EOD
  }
 
 
-
+# Outputs
 output "master-ip" {
     value = ["${google_compute_instance.kube-master.network_interface.0.access_config.*.nat_ip}"]
 } 
